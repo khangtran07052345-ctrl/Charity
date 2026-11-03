@@ -1,0 +1,23 @@
+﻿@model Charity.Models.Campaign
+@{
+    ViewBag.Title = "Xóa chiến dịch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5 mb-5" style="max-width:700px">
+    <div class="card border-danger shadow-sm">
+        <div class="card-body">
+            <h2 class="text-danger">Xác nhận xóa chiến dịch</h2>
+            <p>Bạn có chắc muốn xóa chiến dịch <strong>@Model.Title</strong> không?</p>
+            <p>Số khoản quyên góp liên quan: <strong>@ViewBag.DonationCount</strong>.</p>
+            @if ((int)ViewBag.DonationCount > 0)
+            {<div class="alert alert-warning">Chiến dịch đã có quyên góp sẽ không thể xóa để bảo toàn lịch sử. Hãy chuyển trạng thái sang Đã đóng.</div>}
+            @using (Html.BeginForm("DeleteCampaign", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id", Model.Id)
+                <button type="submit" class="btn btn-danger" @( ((int)ViewBag.DonationCount > 0) ? "disabled" : "")>Xóa chiến dịch</button>
+                @Html.ActionLink("Quay lại", "Campaigns", null, new { @class = "btn btn-outline-secondary ms-2" })
+            }
+        </div>
+    </div>
+</div>

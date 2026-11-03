@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - CHARITY</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+
+            <!-- Tên thương hiệu -->
+            @Html.ActionLink(
+                "CHARITY",
+                "Index",
+                "Home",
+                new { area = "" },
+                new { @class = "navbar-brand" }
+            )
+
+            <!-- Nút menu trên màn hình nhỏ -->
+            <button type="button"
+                    class="navbar-toggler"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+
+                <!-- Menu chính -->
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                            "Trang chủ",
+                            "Index",
+                            "Home",
+                            new { area = "" },
+                            new { @class = "nav-link" }
+                        )
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                            "Chiến dịch",
+                            "Index",
+                            "Campaign",
+                            new { area = "" },
+                            new { @class = "nav-link" }
+                        )
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                            "Giới thiệu",
+                            "GioiThieu",
+                            "Home",
+                            new { area = "" },
+                            new { @class = "nav-link" }
+                        )
+                 
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                             "Liên hệ",
+                             "LienHe",
+                             "Home",
+                             new { area = "" },
+                             new { @class = "nav-link" }
+                        )
+                    </li>
+
+                </ul>
+
+                <!-- Menu tài khoản -->
+                <ul class="navbar-nav">
+
+                    @if (Session["UserId"] != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link text-white">
+                                Xin chào, @Session["FullName"]
+                            </span>
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Đăng xuất",
+                                "Logout",
+                                "Account",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Đăng nhập",
+                                "Login",
+                                "Account",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Đăng ký",
+                                "Register",
+                                "Account",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nội dung từng trang -->
+    <div class="body-content flex-grow-1">
+        @RenderBody()
+    </div>
+
+    <!-- Chân trang -->
+    <footer class="container border-top py-3 mt-4">
+        <p class="mb-0">
+            &copy; @DateTime.Now.Year - CHARITY | Chung tay vì cộng đồng
+        </p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

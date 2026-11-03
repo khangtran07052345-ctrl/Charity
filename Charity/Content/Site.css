@@ -1,0 +1,237 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* ===== CHARITY LOGIN & REGISTER ===== */
+body.charity-auth-body {
+    margin: 0;
+    min-height: 100vh;
+    color: white;
+    background: #09243b;
+}
+
+.charity-auth-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('Images/halong.jpg') center center / cover no-repeat;
+    background-image: url('image/odkkvukjzc80yrzxhqlyxjgxbekbdsvuz8ckluwbvdwsixcgymud3ojpnf6seiojv9dpsgqa0jtodgmeunpevvxoakp6wyt78nsyt9qk2uy_1ukepvdfzwf4lsocigtwhrn0nlezs42q0k4o56baoessbvp3qpundcaxzj02iqbc8lbuu6cqfsji6mhvk_91.jpg');
+}
+
+.charity-auth-page {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 35px 20px;
+    gap: 60px;
+}
+
+.charity-auth-intro {
+    width: 42%;
+    max-width: 500px;
+}
+
+    .charity-auth-intro .eyebrow {
+        letter-spacing: 3px;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .charity-auth-intro h1 {
+        font-size: clamp(30px, 4vw, 48px);
+        font-weight: 800;
+        line-height: 1.2;
+        margin: 18px 0;
+    }
+
+        .charity-auth-intro h1 span {
+            color: #39a9ff;
+        }
+
+    .charity-auth-intro p {
+        line-height: 1.8;
+        color: #e2edf7;
+    }
+
+.charity-auth-form {
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    background: rgba(220, 240, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+}
+
+    .charity-auth-form h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+.charity-auth-subtitle {
+    color: #e1edf8;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.charity-auth-form label {
+    display: block;
+    margin-bottom: 7px;
+    color: #f5faff;
+}
+
+.charity-auth-form .form-control {
+    background: transparent;
+    color: white;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 0;
+    padding: 10px 2px;
+    margin-bottom: 18px;
+    box-shadow: none;
+}
+
+    .charity-auth-form .form-control:focus {
+        border-bottom: 2px solid #168cff;
+        outline: none;
+    }
+
+    .charity-auth-form .form-control::placeholder {
+        color: #c7d8e8;
+    }
+
+.charity-auth-form .btn-charity {
+    width: 100%;
+    color: white;
+    font-weight: 700;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    background: #087fff;
+    box-shadow: 0 0 12px rgba(0, 140, 255, 0.7);
+    transition: 0.25s;
+}
+
+    .charity-auth-form .btn-charity:hover {
+        background: #20a0ff;
+        box-shadow: 0 0 22px rgba(0, 160, 255, 0.95);
+        transform: translateY(-2px);
+    }
+
+.charity-auth-form a {
+    color: #65bdff;
+    text-decoration: none;
+}
+
+    .charity-auth-form a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+.charity-auth-switch {
+    text-align: center;
+    margin: 22px 0 0;
+    color: #e6f2ff;
+}
+
+@media (max-width: 768px) {
+    .charity-auth-page {
+        flex-direction: column;
+        gap: 25px;
+        padding: 30px 16px;
+    }
+
+    .charity-auth-intro {
+        width: 100%;
+        max-width: 420px;
+    }
+
+        .charity-auth-intro h1 {
+            font-size: 30px;
+        }
+
+    .charity-auth-form {
+        padding: 23px;
+    }
+}
+/* ===== DANH SÁCH CHIẾN DỊCH CHARITY ===== */
+.campaign-card {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campaign-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Giới hạn kích thước ảnh */
+.campaign-card > img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Phần chữ bên dưới ảnh */
+.campaign-content {
+    padding: 16px;
+}
+
+    .campaign-content h4 {
+        margin-top: 10px;
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+    .campaign-content p {
+        min-height: 48px;
+        line-height: 1.5;
+    }
+
+/* Hiển thị 4 thẻ trên màn hình lớn */
+@media (min-width: 992px) {
+    .campaign-card > img {
+        height: 180px;
+    }
+}
+
+/* Màn hình điện thoại */
+@media (max-width: 767px) {
+    .campaign-card > img {
+        height: 200px;
+    }
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

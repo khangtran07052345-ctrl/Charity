@@ -1,0 +1,206 @@
+﻿@model Charity.Models.CampaignViewModel
+@using System.Globalization
+
+@{
+    ViewBag.Title = Model.Title;
+    var vi = new CultureInfo("vi-VN");
+}
+
+<style>
+    /* Khung chi tiết chiến dịch */
+    .campaign-detail {
+        max-width: 1100px;
+        margin: 30px auto;
+    }
+
+    /* Ảnh chiến dịch */
+    .campaign-detail-image {
+        display: block;
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Phần thông tin */
+    .campaign-detail-info {
+        padding: 10px 20px;
+    }
+
+        .campaign-detail-info h2 {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 12px 0;
+        }
+
+        .campaign-detail-info .campaign-date {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+    .campaign-detail-description {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+        .campaign-detail-description h4 {
+            color: #123567;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .campaign-detail-description p {
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+    .campaign-detail-back {
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+
+    /* Giao diện điện thoại và máy tính bảng */
+    @@media screen and (max-width: 767px) {
+        .campaign-detail {
+            width: 100%;
+            margin: 15px auto;
+            padding: 0 12px;
+        }
+
+            .campaign-detail .row {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+                .campaign-detail .row > div {
+                    width: 100%;
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+
+        .campaign-detail-image {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .campaign-detail-info {
+            padding: 5px 0 0;
+        }
+
+            .campaign-detail-info h2 {
+                font-size: 24px;
+                line-height: 1.4;
+                overflow-wrap: anywhere;
+            }
+
+        .campaign-detail-description {
+            margin-top: 20px;
+            padding: 16px;
+        }
+
+        .campaign-detail-back {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<div class="container mt-3">
+    @if (TempData["Success"] != null)
+    {<div class="alert alert-success">@TempData["Success"]</div>}
+    @if (TempData["Error"] != null)
+    {<div class="alert alert-warning">@TempData["Error"]</div>}
+</div>
+
+<div class="campaign-detail">
+
+    <div class="row g-4 align-items-start">
+
+        <!-- Cột ảnh -->
+        <div class="col-md-6">
+            @if (Model.Id == 2)
+            {
+                <img src="@Url.Content("~/Content/CampaignImages/bao-lu.jpg")"
+                     alt="Cứu trợ đồng bào lũ lụt miền Trung"
+                     class="campaign-detail-image" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/Content/Image/images (4).jpg")"
+                     alt="@Model.Title"
+                     class="campaign-detail-image" />
+            }
+        </div>
+
+        <!-- Cột thông tin -->
+        <div class="col-md-6">
+            <div class="campaign-detail-info">
+
+                <span class="badge @Model.StatusBadgeClass mb-2">
+                    @Model.StatusText
+                </span>
+
+                <h2>@Model.Title</h2>
+
+                <p class="campaign-date">
+                    Thời gian:
+                    @Model.StartDate.ToString("dd/MM/yyyy")
+                    -
+                    @Model.EndDate.ToString("dd/MM/yyyy")
+                </p>
+
+                <div class="progress mb-3" style="height: 16px;">
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width: @(Model.ProgressPercent)%"
+                         aria-valuenow="@Model.ProgressPercent"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        @Model.ProgressPercent%
+                    </div>
+                </div>
+
+                <p>
+                    Đã quyên góp
+                    <strong>@Model.RaisedAmount.ToString("N0", vi)đ</strong>
+                    <br />
+                    Mục tiêu
+                    <strong>@Model.TargetAmount.ToString("N0", vi)đ</strong>
+                </p>
+
+                @if (Model.StatusKey == "ongoing")
+                {
+                    <a href="@Url.Action("Create", "Donation", new { campaignId = Model.Id })"
+                       class="btn btn-primary btn-lg w-100">
+                        ♥ Quyên góp ngay
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-secondary btn-lg w-100" disabled>
+                        Chiến dịch không còn nhận quyên góp
+                    </button>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Phần giới thiệu căn thẳng hàng với nội dung bên trên -->
+    <div class="campaign-detail-description">
+        <h4>Giới thiệu chiến dịch</h4>
+        <p>@Model.Description</p>
+    </div>
+
+    <a href="@Url.Action("Index", "Campaign")"
+       class="campaign-detail-back">
+        ← Quay lại danh sách
+    </a>
+</div>

@@ -1,0 +1,185 @@
+﻿@model Charity.Models.Campaign
+
+@{
+    ViewBag.Title = "Sửa chiến dịch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4 mb-5" style="max-width: 850px">
+    <h2 class="mb-4">Sửa chiến dịch #@Model.Id</h2>
+
+    @using (Html.BeginForm("EditCampaign", "Admin", FormMethod.Post,
+        new { @class = "card card-body shadow-sm", id = "editCampaignForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CreatedAt)
+
+        @Html.ValidationSummary(false, "Vui lòng kiểm tra dữ liệu:",
+            new { @class = "alert alert-danger" })
+
+        <div class="mb-3">
+            <label class="form-label" for="Title">Tên chiến dịch *</label>
+            @Html.TextBoxFor(m => m.Title, new
+            {
+                @class = "form-control",
+                maxlength = "200",
+                required = "required"
+            })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="CategoryId">Danh mục</label>
+            @Html.DropDownList(
+                "CategoryId",
+                (SelectList)ViewBag.CategoryId,
+                "-- Không chọn --",
+                new { @class = "form-select" }
+            )
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Description">Mô tả *</label>
+            @Html.TextAreaFor(m => m.Description, 5, 10, new
+            {
+                @class = "form-control",
+                required = "required"
+            })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="TargetAmount">Mục tiêu (VNĐ) *</label>
+
+            @Html.TextBoxFor(m => m.TargetAmount, new
+            {
+                @class = "form-control",
+                type = "number",
+                min = "1",
+                step = "1",
+                required = "required"
+            })
+
+            <small class="text-muted">
+                Nhập số tiền nguyên VNĐ, không cần nhập phần thập phân.
+            </small>
+
+            @Html.ValidationMessageFor(m => m.TargetAmount, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label" for="StartDate">Ngày bắt đầu *</label>
+
+                <input id="StartDate"
+                       name="StartDate"
+                       type="date"
+                       class="form-control"
+                       value="@Model.StartDate.ToString("yyyy-MM-dd")"
+                       required />
+
+                @Html.ValidationMessage("StartDate", "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label" for="EndDate">Ngày kết thúc *</label>
+
+                <input id="EndDate"
+                       name="EndDate"
+                       type="date"
+                       class="form-control"
+                       value="@Model.EndDate.ToString("yyyy-MM-dd")"
+                       required />
+
+                @Html.ValidationMessage("EndDate", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="ImageUrl">Đường dẫn ảnh</label>
+
+            @Html.TextBoxFor(m => m.ImageUrl, new
+            {
+                @class = "form-control",
+                maxlength = "500",
+                placeholder = "/Content/CampaignImages/ten-anh.jpg"
+            })
+
+            @Html.ValidationMessageFor(m => m.ImageUrl, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label" for="Status">Trạng thái</label>
+
+            @Html.DropDownListFor(
+                m => m.Status,
+                new SelectList(
+                    new[]
+                    {
+                        new { Value = 0, Text = "Đang hoạt động" },
+                        new { Value = 1, Text = "Đã đóng" },
+                        new { Value = 2, Text = "Hoàn thành" }
+                    },
+                    "Value",
+                    "Text",
+                    Model.Status ?? 0
+                ),
+                new { @class = "form-select" }
+            )
+
+            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                Lưu thay đổi
+            </button>
+
+            @Html.ActionLink(
+                "Hủy",
+                "Campaigns",
+                "Admin",
+                null,
+                new { @class = "btn btn-outline-secondary" }
+            )
+        </div>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("editCampaignForm");
+
+        if (!form) return;
+
+        form.addEventListener("submit", function (event) {
+            var startInput = document.getElementById("StartDate");
+            var endInput = document.getElementById("EndDate");
+            var targetInput = document.getElementById("TargetAmount");
+
+            var startDate = startInput.value;
+            var endDate = endInput.value;
+            var targetAmount = Number(targetInput.value);
+
+            if (!targetInput.value || !Number.isFinite(targetAmount) || targetAmount <= 0) {
+                event.preventDefault();
+                alert("Mục tiêu quyên góp phải là số tiền lớn hơn 0.");
+                targetInput.focus();
+                return;
+            }
+
+            if (!startDate || !endDate) {
+                event.preventDefault();
+                alert("Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc.");
+                return;
+            }
+
+            if (endDate <= startDate) {
+                event.preventDefault();
+                alert("Ngày kết thúc phải sau ngày bắt đầu.");
+                endInput.focus();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Đăng ký";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="charity-auth-background"></div>
+
+<div class="charity-auth-page">
+    <div class="charity-auth-intro">
+        <div class="eyebrow">Tham gia cộng đồng CHARITY</div>
+
+        <h1>
+            Tạo tài khoản<br />
+            <span>CHARITY</span>
+        </h1>
+
+        <p>
+            Đăng ký ngay để khám phá các chiến dịch,
+            đồng hành cùng những hoàn cảnh khó khăn
+            và lan tỏa giá trị tốt đẹp.
+        </p>
+    </div>
+
+    <div class="charity-auth-form">
+        <h2>Tạo tài khoản</h2>
+        <p class="charity-auth-subtitle">
+            Hãy trở thành một phần của cộng đồng CHARITY!
+        </p>
+
+        <form method="post" action="@Url.Action("Register", "Account")">
+            @Html.AntiForgeryToken()
+
+            <label for="FullName">Họ và tên</label>
+            <input type="text" id="FullName" name="FullName"
+                   class="form-control" placeholder="Nhập họ và tên"
+                   required />
+
+            <label for="Email">Địa chỉ email</label>
+            <input type="email" id="Email" name="Email"
+                   class="form-control" placeholder="Nhập địa chỉ email"
+                   required />
+
+            <label for="Password">Mật khẩu</label>
+            <input type="password" id="Password" name="Password"
+                   class="form-control" placeholder="Ít nhất 8 ký tự"
+                   minlength="8" required />
+
+            <label for="ConfirmPassword">Xác nhận mật khẩu</label>
+            <input type="password" id="ConfirmPassword"
+                   name="ConfirmPassword" class="form-control"
+                   placeholder="Nhập lại mật khẩu"
+                   minlength="8" required />
+
+            <button type="submit" class="btn-charity">
+                Tạo tài khoản
+            </button>
+        </form>
+
+        <p class="charity-auth-switch">
+            Đã có tài khoản?
+            @Html.ActionLink("Đăng nhập", "Login", "Account")
+        </p>
+    </div>
+</div>
+
+<script>
+        document.body.classList.add("charity-auth-body");
+</script>

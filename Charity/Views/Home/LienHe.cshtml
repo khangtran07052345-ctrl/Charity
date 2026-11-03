@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Liên hệ";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Liên hệ với CHARITY</h1>
+        <p class="lead">
+            Chúng tôi luôn sẵn sàng tiếp nhận câu hỏi và góp ý của bạn.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Thông tin liên hệ -->
+        <div class="col-md-5">
+            <div class="p-4 bg-light rounded shadow-sm h-100">
+                <h3 class="mb-4">Thông tin liên hệ</h3>
+
+                <p>
+                    <strong>Đơn vị:</strong> Quản trị hệ thống CHARITY
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    <a href="mailto:admin@charity.com">
+                        admin@charity.com
+                    </a>
+                </p>
+
+                <p>
+                    <strong>Điện thoại:</strong>
+                    <a href="tel:0901234567">
+                        0901234567
+                    </a>
+                </p>
+
+                <p>
+                    <strong>Địa chỉ:</strong>
+                    Vui lòng liên hệ qua email để được hỗ trợ.
+                </p>
+            </div>
+        </div>
+
+        <!-- Biểu mẫu liên hệ -->
+        <div class="col-md-7">
+            <div class="p-4 border rounded shadow-sm">
+                <h3 class="mb-4">Gửi lời nhắn</h3>
+
+                <form method="post" action="@Url.Action("LienHe", "Home")">
+
+                    <div class="mb-3">
+                        <label for="hoTen" class="form-label">Họ và tên</label>
+                        <input type="text"
+                               class="form-control"
+                               id="hoTen"
+                               name="hoTen"
+                               placeholder="Nhập họ và tên"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Nhập email của bạn"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="noiDung" class="form-label">Nội dung</label>
+                        <textarea class="form-control"
+                                  id="noiDung"
+                                  name="noiDung"
+                                  rows="5"
+                                  placeholder="Nhập nội dung cần liên hệ"
+                                  required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Gửi liên hệ
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

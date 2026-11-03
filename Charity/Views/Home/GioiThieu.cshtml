@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Giới thiệu";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Về CHARITY</h1>
+        <p class="lead">
+            Chung tay sẻ chia yêu thương, lan tỏa những giá trị tốt đẹp đến cộng đồng.
+        </p>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4">
+            <h2>Sứ mệnh của chúng tôi</h2>
+            <p>
+                CHARITY là nền tảng hỗ trợ kết nối những người có mong muốn đóng góp
+                với các chiến dịch thiện nguyện vì cộng đồng.
+            </p>
+            <p>
+                Chúng tôi hướng đến việc giúp người dùng dễ dàng tìm hiểu chiến dịch,
+                theo dõi mục tiêu gây quỹ và thực hiện quyên góp.
+            </p>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h2>Giá trị cốt lõi</h2>
+            <ul>
+                <li>Lan tỏa tinh thần tương thân tương ái.</li>
+                <li>Kết nối cộng đồng với các hoạt động thiện nguyện.</li>
+                <li>Cung cấp thông tin và tiến độ chiến dịch rõ ràng.</li>
+                <li>Khuyến khích mọi người cùng đóng góp vì xã hội tốt đẹp hơn.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <h2>Cùng chúng tôi tạo nên sự khác biệt</h2>
+        <p>
+            Mỗi đóng góp, dù lớn hay nhỏ, đều có thể mang lại những thay đổi tích cực.
+        </p>
+
+        @Html.ActionLink(
+            "Khám phá chiến dịch",
+            "Index",
+            "Campaign",
+            null,
+            new { @class = "btn btn-primary btn-lg mt-2" }
+        )
+    </div>
+</div>

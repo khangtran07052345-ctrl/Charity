@@ -1,0 +1,83 @@
+﻿
+@model List<Charity.Models.CampaignViewModel>
+@using System.Globalization
+@{
+    ViewBag.Title = "Danh sách chiến dịch";
+    var vi = new CultureInfo("vi-VN");
+    string status = ViewBag.Status as string;
+}
+
+<!-- Tiêu đề danh sách chiến dịch -->
+<h2 class="my-4">Các chiến dịch</h2>
+
+
+<form method="get" action="@Url.Action("Index", "Campaign")" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control"
+               placeholder="Tìm chiến dịch theo tên..." />
+    </div>
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">Tất cả trạng thái</option>
+            <option value="ongoing" @(status == "ongoing" ? "selected" : "")>Đang diễn ra</option>
+            <option value="reached" @(status == "reached" ? "selected" : "")>Đạt mục tiêu</option>
+            <option value="ended" @(status == "ended" ? "selected" : "")>Đã kết thúc</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+    </div>
+</form>
+
+<div class="row g-4">
+
+    @if (!Model.Any())
+    {
+        <div class="col-12">
+            <div class="alert alert-info">Không tìm thấy chiến dịch phù hợp.</div>
+        </div>
+    }
+
+    @foreach (var c in Model)
+    {
+
+        <div class="col-md-6 col-lg-3">
+            <div class="campaign-card" style="width:100%; max-width:280px; overflow:hidden;">
+                @if (c.Id == 2)
+                {
+                    <img src="@Url.Content("~/Content/CampaignImages/bao-lu.jpg")"
+                         alt="Cứu trợ đồng bào lũ lụt miền Trung"
+                         style="display:block; width:100%; height:180px; object-fit:cover;" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/Content/Image/images (4).jpg")"
+                         alt="@c.Title"
+                         style="display:block; width:100%; height:180px; object-fit:cover;" />
+                }
+                <div class="campaign-content">
+                    <span class="category">@c.StatusText</span>
+                    <h4>@c.Title</h4>
+                    <p>@c.Description</p>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:@(c.ProgressPercent)%;"></div>
+                    </div>
+
+                    <div class="money-info">
+                        <strong>@c.RaisedAmount.ToString("N0", vi)đ</strong>
+                        <strong>@c.ProgressPercent%</strong>
+                    </div>
+
+                    <div class="money-info">
+                        <span>Đã quyên góp</span>
+                        <span>Mục tiêu @((c.TargetAmount / 1000000m).ToString("0.##", vi)) triệu</span>
+                    </div>
+
+                    <a href="@Url.Action("Details", "Campaign", new { id = c.Id })"
+                       class="campaign-button">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

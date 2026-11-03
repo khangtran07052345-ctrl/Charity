@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="charity-auth-background"></div>
+
+<div class="charity-auth-page">
+    <div class="charity-auth-intro">
+        <div class="eyebrow">Chào mừng bạn đến với CHARITY</div>
+
+        <h1>
+            Cùng nhau<br />
+            <span>lan tỏa yêu thương</span>
+        </h1>
+
+        <p>
+            Mỗi hành động nhỏ đều có thể tạo nên sự thay đổi lớn.
+            Hãy đăng nhập để tiếp tục hành trình thiện nguyện cùng chúng tôi.
+        </p>
+    </div>
+
+    <div class="charity-auth-form">
+        <h2>Đăng nhập</h2>
+        <p class="charity-auth-subtitle">
+            Chào mừng bạn trở lại! Vui lòng đăng nhập để tiếp tục.
+        </p>
+        @if (ViewBag.Error != null)
+        {
+            <p class="text-danger">@ViewBag.Error</p>
+        }
+
+        <form method="post" action="@Url.Action("Login", "Account")">
+            @Html.AntiForgeryToken()
+
+            <label for="Email">Địa chỉ email</label>
+            <input type="email" id="Email" name="Email"
+                   class="form-control" placeholder="Nhập email của bạn"
+                   required />
+
+            <label for="Password">Mật khẩu</label>
+            <input type="password" id="Password" name="Password"
+                   class="form-control" placeholder="Nhập mật khẩu"
+                   required />
+
+            <button type="submit" class="btn-charity">
+                Đăng nhập
+            </button>
+        </form>
+
+        <p class="charity-auth-switch">
+            Chưa có tài khoản?
+            @Html.ActionLink("Đăng ký ngay", "Register", "Account")
+        </p>
+    </div>
+</div>
+
+<script>
+        document.body.classList.add("charity-auth-body");
+</script>

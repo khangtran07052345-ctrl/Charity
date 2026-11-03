@@ -1,0 +1,38 @@
+﻿@using System.Linq
+@model IEnumerable<Charity.Models.CampaignViewModel>
+@{
+    ViewBag.Title = "Quản lý chiến dịch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+        <h2>Quản lý chiến dịch</h2>
+        @Html.ActionLink("+ Thêm chiến dịch", "CreateCampaign", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+    @if (TempData["Success"] != null)
+    {<div class="alert alert-success">@TempData["Success"]</div>}
+    @if (TempData["Error"] != null)
+    {<div class="alert alert-danger">@TempData["Error"]</div>}
+    @using (Html.BeginForm("Campaigns", "Admin", FormMethod.Get, new { @class = "row g-2 mb-3" }))
+    {
+        <div class="col-md-6"><input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control" placeholder="Tìm theo tên chiến dịch..." /></div>
+        <div class="col-md-3"><select name="status" class="form-select"><option value="">Tất cả trạng thái</option><option value="ongoing" @((string)ViewBag.Status == "ongoing" ? "selected" : "")>Đang diễn ra</option><option value="reached" @((string)ViewBag.Status == "reached" ? "selected" : "")>Hoàn thành mục tiêu</option><option value="ended" @((string)ViewBag.Status == "ended" ? "selected" : "")>Đã đóng / hết hạn</option></select></div>
+        <div class="col-md-3"><button class="btn btn-outline-primary w-100" type="submit">Tìm kiếm / lọc</button></div>
+    }
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark"><tr><th>ID</th><th>Tên chiến dịch</th><th>Thời hạn</th><th>Đã nhận / Mục tiêu</th><th>Tiến độ</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr><td>@c.Id</td><td><strong>@c.Title</strong><div class="small text-muted">@c.Description</div></td><td>@c.StartDate.ToString("dd/MM/yyyy") – @c.EndDate.ToString("dd/MM/yyyy")</td><td>@c.RaisedAmount.ToString("N0") / @c.TargetAmount.ToString("N0") đ</td><td style="min-width:110px"><div class="progress"><div class="progress-bar" style="width:@c.ProgressPercent%">@c.ProgressPercent%</div></div></td><td><span class="badge @c.StatusBadgeClass">@c.StatusText</span></td><td class="text-nowrap">@Html.ActionLink("Sửa", "EditCampaign", new { id = c.Id }, new { @class = "btn btn-sm btn-outline-primary" }) @Html.ActionLink("Xóa", "DeleteCampaign", new { id = c.Id }, new { @class = "btn btn-sm btn-outline-danger" })</td></tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="7" class="text-center text-muted">Không có chiến dịch phù hợp.</td></tr>
+}
+            </tbody>
+        </table>
+    </div>
+    @Html.ActionLink("← Về Dashboard", "Index", "Admin", null, new { @class = "btn btn-outline-secondary mt-2" })
+</div>

@@ -1,0 +1,21 @@
+﻿@model Charity.Models.Campaign
+@{
+    ViewBag.Title = "Thêm chiến dịch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-4 mb-5" style="max-width:850px">
+    <h2>Thêm chiến dịch mới</h2>
+    @using (Html.BeginForm("CreateCampaign", "Admin", FormMethod.Post, new { @class = "card card-body shadow-sm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "Vui lòng kiểm tra dữ liệu:", new { @class = "alert alert-danger" })
+        <div class="mb-3"><label class="form-label">Tên chiến dịch *</label>@Html.TextBoxFor(m => m.Title, new { @class = "form-control", maxlength = "200" })@Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })</div>
+        <div class="mb-3"><label class="form-label">Danh mục</label>@Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "-- Không chọn --", new { @class = "form-select" })</div>
+        <div class="mb-3"><label class="form-label">Mô tả *</label>@Html.TextAreaFor(m => m.Description, 5, 10, new { @class = "form-control" })@Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })</div>
+        <div class="mb-3"><label class="form-label">Mục tiêu (VNĐ) *</label>@Html.TextBoxFor(m => m.TargetAmount, new { @class = "form-control", type = "number", min = "1", step = "1000" })@Html.ValidationMessageFor(m => m.TargetAmount, "", new { @class = "text-danger" })</div>
+        <div class="row"><div class="col-md-6 mb-3"><label class="form-label">Ngày bắt đầu *</label><input name="StartDate" type="date" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" required />@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })</div><div class="col-md-6 mb-3"><label class="form-label">Ngày kết thúc *</label><input name="EndDate" type="date" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" required />@Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })</div></div>
+        <div class="mb-3"><label class="form-label">Đường dẫn ảnh (không bắt buộc)</label>@Html.TextBoxFor(m => m.ImageUrl, new { @class = "form-control", maxlength = "500", placeholder = "/Content/CampaignImages/bao-lu.jpg" })</div>
+        <div class="mb-3"><label class="form-label">Trạng thái</label>@Html.DropDownListFor(m => m.Status, new SelectList(new[] { new { Value = 0, Text = "Đang hoạt động" }, new { Value = 1, Text = "Đã đóng" }, new { Value = 2, Text = "Hoàn thành" } }, "Value", "Text", Model.Status ?? 0), new { @class = "form-select" })</div>
+        <div><button type="submit" class="btn btn-primary">Lưu chiến dịch</button> @Html.ActionLink("Hủy", "Campaigns", null, new { @class = "btn btn-outline-secondary" })</div>
+    }
+</div>

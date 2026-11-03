@@ -1,0 +1,398 @@
+﻿@using System
+@using System.Linq
+@using Charity.Models
+
+@{
+    ViewBag.Title = "Quản trị hệ thống";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var campaigns = ViewBag.Campaigns as IEnumerable<CampaignViewModel>
+                    ?? Enumerable.Empty<CampaignViewModel>();
+
+    decimal totalAmount = ViewBag.TotalAmount == null
+        ? 0m
+        : Convert.ToDecimal(ViewBag.TotalAmount);
+
+    decimal totalTarget = ViewBag.TotalTarget == null
+        ? 0m
+        : Convert.ToDecimal(ViewBag.TotalTarget);
+
+    // Tính tiến độ tổng từ dữ liệu thống kê của AdminController.
+    int overallProgress = 0;
+
+    if (totalTarget > 0)
+    {
+        overallProgress = (int)Math.Round(
+            totalAmount / totalTarget * 100m
+        );
+
+        overallProgress = Math.Max(0, Math.Min(100, overallProgress));
+    }
+
+    int totalCampaigns = ViewBag.TotalCampaigns == null
+        ? 0
+        : Convert.ToInt32(ViewBag.TotalCampaigns);
+
+    int totalUsers = ViewBag.TotalUsers == null
+        ? 0
+        : Convert.ToInt32(ViewBag.TotalUsers);
+
+    int validDonationCount = ViewBag.ValidDonationCount == null
+        ? 0
+        : Convert.ToInt32(ViewBag.ValidDonationCount);
+}
+
+<style>
+    .admin-dashboard {
+        color: #243247;
+    }
+
+        .admin-dashboard .stat-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+            .admin-dashboard .stat-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 18px rgba(0, 0, 0, .08) !important;
+            }
+
+        .admin-dashboard .stat-label {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .admin-dashboard .stat-number {
+            font-size: 30px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .admin-dashboard .section-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .admin-dashboard .progress {
+            height: 22px;
+            background-color: #e9ecef;
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .admin-dashboard .progress-bar {
+            min-width: 0;
+            transition: width .3s ease;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .admin-dashboard .campaign-progress {
+            min-width: 150px;
+        }
+
+        .admin-dashboard .admin-link {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            color: #243247;
+            transition: all .2s ease;
+        }
+
+            .admin-dashboard .admin-link:hover {
+                border-color: #0d6efd;
+                background-color: #f8fbff;
+                transform: translateY(-2px);
+            }
+
+        .admin-dashboard .table th {
+            white-space: nowrap;
+        }
+
+    @@media (max-width: 576px) {
+        .admin-dashboard .stat-number {
+            font-size: 25px;
+        }
+
+        .admin-dashboard .campaign-progress {
+            min-width: 120px;
+        }
+    }
+</style>
+
+<div class="container-fluid px-3 px-md-4 mt-4 mb-5 admin-dashboard">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h2 class="mb-1">Bảng điều khiển Admin</h2>
+
+            <p class="text-muted mb-0">
+                Xin chào, @Session["FullName"]!
+                Thống kê được tính từ cơ sở dữ liệu.
+            </p>
+        </div>
+
+        <span class="badge bg-dark p-2">
+            Quản trị viên
+        </span>
+    </div>
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Đóng">
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Đóng">
+            </button>
+        </div>
+    }
+
+    <!-- THẺ THỐNG KÊ -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-label">Tổng chiến dịch</div>
+                    <div class="stat-number">@totalCampaigns</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-label">Tài khoản</div>
+                    <div class="stat-number">@totalUsers</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-label">Lượt quyên góp hợp lệ</div>
+                    <div class="stat-number">@validDonationCount</div>
+
+                    <small class="text-muted">
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-label">Tổng tiền hợp lệ</div>
+
+                    <div class="stat-number text-primary">
+                        @totalAmount.ToString("N0") đ
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TIẾN ĐỘ TỔNG -->
+    <div class="card section-card shadow-sm mb-4">
+        <div class="card-body p-3 p-md-4">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h5 class="mb-0">Tổng tiến độ mục tiêu</h5>
+
+                <strong class="fs-5">
+                    @overallProgress%
+                </strong>
+            </div>
+
+            <div class="progress"
+                 role="progressbar"
+                 aria-label="Tổng tiến độ quyên góp"
+                 aria-valuenow="@overallProgress"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+
+                @if (overallProgress > 0)
+                {
+                    <div class="progress-bar bg-success"
+                         style="width: @overallProgress%;">
+                        @overallProgress%
+                    </div>
+                }
+            </div>
+
+            <div class="small text-muted mt-3">
+                Đã nhận:
+                <strong>@totalAmount.ToString("N0") đ</strong>
+
+                / Tổng mục tiêu:
+                <strong>@totalTarget.ToString("N0") đ</strong>
+            </div>
+
+            @if (totalTarget <= 0)
+            {
+                <div class="small text-warning mt-2">
+                    Chưa có mục tiêu quyên góp hợp lệ để tính tiến độ.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- TIẾN ĐỘ TỪNG CHIẾN DỊCH -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+        <h4 class="mb-0">Tiến độ chiến dịch</h4>
+
+        @Html.ActionLink(
+            "+ Thêm chiến dịch",
+            "CreateCampaign",
+            "Admin",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+    </div>
+
+    <div class="table-responsive mb-4">
+        <table class="table table-striped table-hover align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Chiến dịch</th>
+                    <th>Đã nhận</th>
+                    <th>Mục tiêu</th>
+                    <th style="min-width: 170px;">Tiến độ</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var c in campaigns)
+                {
+                    // Bảo vệ giao diện khỏi phần trăm âm hoặc vượt quá 100.
+                    int campaignProgress = Math.Max(
+                        0,
+                        Math.Min(100, c.ProgressPercent)
+                    );
+
+                    <tr>
+                        <td>
+                            <span class="fw-semibold">
+                                @c.Title
+                            </span>
+                        </td>
+
+                        <td class="text-nowrap">
+                            @c.RaisedAmount.ToString("N0") đ
+                        </td>
+
+                        <td class="text-nowrap">
+                            @c.TargetAmount.ToString("N0") đ
+                        </td>
+
+                        <td>
+                            <div class="d-flex align-items-center gap-2 campaign-progress">
+
+                                <div class="progress flex-grow-1"
+                                     role="progressbar"
+                                     aria-label="Tiến độ @c.Title"
+                                     aria-valuenow="@campaignProgress"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+
+                                    @if (campaignProgress > 0)
+                                    {
+                                        <div class="progress-bar @c.StatusBadgeClass"
+                                             style="width: @campaignProgress%;">
+                                        </div>
+                                    }
+                                </div>
+
+                                <small class="fw-semibold text-nowrap">
+                                    @campaignProgress%
+                                </small>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="badge @c.StatusBadgeClass">
+                                @c.StatusText
+                            </span>
+                        </td>
+                    </tr>
+                }
+
+                @if (!campaigns.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Chưa có chiến dịch nào.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- CHỨC NĂNG QUẢN TRỊ -->
+    <h4 class="mb-3">Chức năng quản trị</h4>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6">
+            <a class="card admin-link card-body h-100 text-decoration-none"
+               href="@Url.Action("Campaigns", "Admin")">
+
+                <h5 class="mb-2">Quản lý chiến dịch</h5>
+
+                <span class="text-muted">
+                    Thêm, sửa, xóa và lọc chiến dịch.
+                </span>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <a class="card admin-link card-body h-100 text-decoration-none"
+               href="@Url.Action("Donations", "Admin")">
+
+                <h5 class="mb-2">Quản lý quyên góp</h5>
+
+                <span class="text-muted">
+                    Tra cứu giao dịch và kiểm tra tổng tiền hợp lệ.
+                </span>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ĐĂNG XUẤT -->
+    <div class="mt-4">
+        @Html.ActionLink(
+            "Đăng xuất",
+            "Logout",
+            "Account",
+            null,
+            new { @class = "btn btn-outline-danger" }
+        )
+    </div>
+
+</div>
