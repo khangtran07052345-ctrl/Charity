@@ -124,10 +124,10 @@
 
         <!-- Cột ảnh -->
         <div class="col-md-6">
-            @if (Model.Id == 2)
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
             {
-                <img src="@Url.Content("~/Content/CampaignImages/bao-lu.jpg")"
-                     alt="Cứu trợ đồng bào lũ lụt miền Trung"
+                <img src="@Url.Content(Model.ImageUrl)"
+                     alt="@Model.Title"
                      class="campaign-detail-image" />
             }
             else
