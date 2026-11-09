@@ -1,38 +1,44 @@
-﻿using System;
+﻿
+using System;
 
 namespace Charity.Models
 {
     public class CampaignViewModel
     {
+        // ID chiến dịch
         public int Id { get; set; }
 
+        // Thông tin chiến dịch
         public string Title { get; set; }
 
         public string Description { get; set; }
 
+        // Đường dẫn ảnh được Admin tải lên
         public string ImageUrl { get; set; }
 
+        // Số tiền mục tiêu
         public decimal TargetAmount { get; set; }
 
-        // Tổng tiền quyên góp hợp lệ của chiến dịch
+        // Tổng tiền quyên góp hợp lệ
         public decimal RaisedAmount { get; set; }
 
+        // Thời gian chiến dịch
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        // Quy ước trạng thái trong database:
+        // Trạng thái lưu trong database:
         // 0 = Đang hoạt động
-        // 1 = Đóng chiến dịch
+        // 1 = Đã đóng
         // 2 = Hoàn thành mục tiêu
         public int DbStatus { get; set; }
 
-        // Tính phần trăm hoàn thành mục tiêu
+        // Phần trăm hoàn thành mục tiêu
         public int ProgressPercent
         {
             get
             {
-                if (TargetAmount <= 0)
+                if (TargetAmount <= 0 || RaisedAmount <= 0)
                     return 0;
 
                 decimal percent = RaisedAmount / TargetAmount * 100m;
@@ -40,27 +46,24 @@ namespace Charity.Models
                 if (percent >= 100m)
                     return 100;
 
-                if (percent <= 0m)
-                    return 0;
-
                 return (int)Math.Round(percent);
             }
         }
 
-        // Xác định trạng thái hiển thị
+        // Khóa trạng thái chiến dịch
         public string StatusKey
         {
             get
             {
-                // Ưu tiên kiểm tra đã đạt mục tiêu
+                // Đã đạt mục tiêu
                 if (TargetAmount > 0 && RaisedAmount >= TargetAmount)
                     return "reached";
 
-                // Chiến dịch đã được đóng thủ công
+                // Đã đóng thủ công
                 if (DbStatus == 1)
                     return "ended";
 
-                // Chiến dịch đã được đánh dấu hoàn thành
+                // Đã được đánh dấu hoàn thành
                 if (DbStatus == 2)
                     return "reached";
 
@@ -72,16 +75,16 @@ namespace Charity.Models
                 if (StartDate.Date > DateTime.Today)
                     return "upcoming";
 
-                // Đã qua ngày kết thúc
+                // Đã hết hạn
                 if (EndDate.Date < DateTime.Today)
                     return "ended";
 
-                // Đang trong thời gian hoạt động
+                // Đang hoạt động
                 return "ongoing";
             }
         }
 
-        // Nội dung trạng thái hiển thị
+        // Tên trạng thái hiển thị
         public string StatusText
         {
             get

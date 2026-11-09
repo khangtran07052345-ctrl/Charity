@@ -1,83 +1,260 @@
 ﻿
 @model List<Charity.Models.CampaignViewModel>
 @using System.Globalization
+
 @{
     ViewBag.Title = "Danh sách chiến dịch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     var vi = new CultureInfo("vi-VN");
     string status = ViewBag.Status as string;
 }
 
-<!-- Tiêu đề danh sách chiến dịch -->
-<h2 class="my-4">Các chiến dịch</h2>
-
-
-<form method="get" action="@Url.Action("Index", "Campaign")" class="row g-2 mb-4">
-    <div class="col-md-6">
-        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control"
-               placeholder="Tìm chiến dịch theo tên..." />
-    </div>
-    <div class="col-md-3">
-        <select name="status" class="form-select">
-            <option value="">Tất cả trạng thái</option>
-            <option value="ongoing" @(status == "ongoing" ? "selected" : "")>Đang diễn ra</option>
-            <option value="reached" @(status == "reached" ? "selected" : "")>Đạt mục tiêu</option>
-            <option value="ended" @(status == "ended" ? "selected" : "")>Đã kết thúc</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-    </div>
-</form>
-
-<div class="row g-4">
-
-    @if (!Model.Any())
-    {
-        <div class="col-12">
-            <div class="alert alert-info">Không tìm thấy chiến dịch phù hợp.</div>
-        </div>
+<style>
+    .campaign-list {
+        padding-bottom: 50px;
     }
 
-    @foreach (var c in Model)
-    {
+    .campaign-card {
+        width: 100%;
+        height: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
 
-        <div class="col-md-6 col-lg-3">
-            <div class="campaign-card" style="width:100%; max-width:280px; overflow:hidden;">
-                @if (c.Id == 2)
-                {
-                    <img src="@Url.Content("~/Content/CampaignImages/bao-lu.jpg")"
-                         alt="Cứu trợ đồng bào lũ lụt miền Trung"
-                         style="display:block; width:100%; height:180px; object-fit:cover;" />
-                }
-                else
-                {
-                    <img src="@Url.Content("~/Content/Image/images (4).jpg")"
-                         alt="@c.Title"
-                         style="display:block; width:100%; height:180px; object-fit:cover;" />
-                }
-                <div class="campaign-content">
-                    <span class="category">@c.StatusText</span>
-                    <h4>@c.Title</h4>
-                    <p>@c.Description</p>
+        .campaign-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0,0,0,.12);
+        }
 
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:@(c.ProgressPercent)%;"></div>
-                    </div>
+    .campaign-image {
+        display: block;
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        background: #f1f5f9;
+    }
 
-                    <div class="money-info">
-                        <strong>@c.RaisedAmount.ToString("N0", vi)đ</strong>
-                        <strong>@c.ProgressPercent%</strong>
-                    </div>
+    .campaign-content {
+        padding: 18px;
+    }
 
-                    <div class="money-info">
-                        <span>Đã quyên góp</span>
-                        <span>Mục tiêu @((c.TargetAmount / 1000000m).ToString("0.##", vi)) triệu</span>
-                    </div>
+        .campaign-content h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 10px 0;
+            min-height: 48px;
+        }
 
-                    <a href="@Url.Action("Details", "Campaign", new { id = c.Id })"
-                       class="campaign-button">Xem chi tiết</a>
+    .campaign-description {
+        color: #6b7280;
+        font-size: 14px;
+        min-height: 60px;
+        overflow: hidden;
+    }
+
+    .campaign-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: #e8f2ff;
+        color: #0d6efd;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .progress-track {
+        height: 9px;
+        width: 100%;
+        margin: 15px 0 10px;
+        background: #e9ecef;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #16a34a;
+        border-radius: 20px;
+    }
+
+    .money-info {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 7px;
+        font-size: 13px;
+    }
+
+        .money-info strong {
+            color: #198754;
+        }
+
+    .campaign-button {
+        display: block;
+        width: 100%;
+        margin-top: 18px;
+        padding: 10px;
+        border-radius: 8px;
+        background: #0d6efd;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background .2s ease;
+    }
+
+        .campaign-button:hover {
+            background: #0b5ed7;
+            color: white;
+        }
+</style>
+
+<div class="container campaign-list mt-4">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="mb-4">
+        <h2 class="fw-bold">Các chiến dịch</h2>
+        <p class="text-muted">
+            Chung tay sẻ chia, lan tỏa yêu thương đến cộng đồng.
+        </p>
+    </div>
+
+    <!-- TÌM KIẾM VÀ LỌC -->
+    <form method="get"
+          action="@Url.Action("Index", "Campaign")"
+          class="row g-2 mb-4">
+
+        <div class="col-md-6">
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   class="form-control"
+                   placeholder="Tìm chiến dịch theo tên..." />
+        </div>
+
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">Tất cả trạng thái</option>
+
+                <option value="ongoing"
+                        @(status == "ongoing" ? "selected" : "")>
+                    Đang diễn ra
+                </option>
+
+                <option value="reached"
+                        @(status == "reached" ? "selected" : "")>
+                    Đạt mục tiêu
+                </option>
+
+                <option value="ended"
+                        @(status == "ended" ? "selected" : "")>
+                    Đã kết thúc
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Tìm kiếm
+            </button>
+        </div>
+    </form>
+
+    <!-- DANH SÁCH CHIẾN DỊCH -->
+    <div class="row g-4">
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    Không tìm thấy chiến dịch phù hợp.
                 </div>
             </div>
-        </div>
-    }
+        }
+        else
+        {
+            foreach (var c in Model)
+            {
+                int progress = Math.Max(0, Math.Min(100, c.ProgressPercent));
+
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                    <div class="campaign-card">
+
+                        <!-- ẢNH RIÊNG CỦA TỪNG CHIẾN DỊCH -->
+                        @if (!string.IsNullOrWhiteSpace(c.ImageUrl))
+                        {
+                            <img src="@Url.Content(c.ImageUrl)"
+                                 alt="@c.Title"
+                                 class="campaign-image" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Content/Image/images (4).jpg")"
+                                 alt="Ảnh mặc định"
+                                 class="campaign-image" />
+                        }
+
+                        <div class="campaign-content">
+
+                            <span class="campaign-status">
+                                @c.StatusText
+                            </span>
+
+                            <h4>
+                                @c.Title
+                            </h4>
+
+                            <p class="campaign-description">
+                                @c.Description
+                            </p>
+
+                            <!-- TIẾN ĐỘ -->
+                            <div class="progress-track">
+                                <div class="progress-fill"
+                                     style="width: @(progress)%;">
+                                </div>
+                            </div>
+
+                            <div class="money-info">
+                                <strong>
+                                    @c.RaisedAmount.ToString("N0", vi) đ
+                                </strong>
+
+                                <strong>
+                                    @progress%
+                                </strong>
+                            </div>
+
+                            <div class="money-info">
+                                <span>Đã quyên góp</span>
+
+                                <span>
+                                    Mục tiêu
+                                    @((c.TargetAmount / 1000000m).ToString("0.##", vi))
+                                    triệu
+                                </span>
+                            </div>
+
+                            <!-- XEM CHI TIẾT -->
+                            <a href="@Url.Action("Details", "Campaign", new { id = c.Id })"
+                               class="campaign-button">
+                                Xem chi tiết
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
 </div>

@@ -6,8 +6,7 @@
     ViewBag.Title = "Quản trị hệ thống";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var campaigns = ViewBag.Campaigns as IEnumerable<CampaignViewModel>
-                    ?? Enumerable.Empty<CampaignViewModel>();
+    var campaigns = ViewBag.Campaigns as IEnumerable<CampaignViewModel> ?? Enumerable.Empty<CampaignViewModel>();
 
     decimal totalAmount = ViewBag.TotalAmount == null
         ? 0m

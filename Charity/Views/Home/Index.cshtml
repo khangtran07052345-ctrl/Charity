@@ -229,10 +229,9 @@
                 {
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="campaign-card">
-
-                            @if (c.Id == 2)
+                            @if (!string.IsNullOrWhiteSpace(c.ImageUrl))
                             {
-                                <img src="@Url.Content("~/Content/CampaignImages/bao-lu.jpg")"
+                                <img src="@Url.Content(c.ImageUrl)"
                                      alt="@c.Title"
                                      class="campaign-home-image" />
                             }
@@ -249,7 +248,7 @@
                                 </span>
 
                                 <h4>
-                                    @(c.Id == 2 ? "Cứu trợ lũ lụt miền Trung" : c.Title)
+                                    @c.Title
                                 </h4>
 
                                 <p>@c.Description</p>

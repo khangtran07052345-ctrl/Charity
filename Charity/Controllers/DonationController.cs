@@ -206,7 +206,30 @@ namespace Charity.Controllers
 
             return null;
         }
+        public ActionResult History()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            int userId = Convert.ToInt32(Session["UserId"]);
+
+            var donations = db.Donations
+                .Where(d => d.UserId == userId)
+                .OrderByDescending(d => d.DonatedAt)
+                .ToList();
+
+            ViewBag.UserId = userId;
+            ViewBag.TotalAmount = donations
+                .Where(d => d.Status == 1)
+                .Sum(d => d.Amount);
+
+            ViewBag.TotalDonations = donations
+                .Count(d => d.Status == 1);
+
+            return View(donations);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

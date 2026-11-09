@@ -257,6 +257,11 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\CampaignImages\bao-lu.jpg" />
     <Content Include="Content\CampaignImages\DuAn.jpg" />
+    <Content Include="Content\CampaignImages\images %281%29.jpg" />
+    <Content Include="Content\CampaignImages\images %282%29.jpg" />
+    <Content Include="Content\Image\1.jpg" />
+    <Content Include="Content\Image\2.jpg" />
+    <Content Include="Content\Image\3.jpg" />
     <Content Include="Content\Image\images %282%29.jpg" />
     <Content Include="Content\Image\images %283%29.jpg" />
     <Content Include="Content\Image\images %284%29.jpg" />
@@ -357,6 +362,7 @@
     <Content Include="Views\Admin\Donations.cshtml" />
     <Content Include="Views\Admin\EditCampaign.cshtml" />
     <Content Include="Views\Donation\Create.cshtml" />
+    <Content Include="Views\Donation\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

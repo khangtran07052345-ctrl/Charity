@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Charity.Models.Donation>
+
+@{
+    ViewBag.Title = "Lịch sử quyên góp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4 mb-5">
+
+    <h2 class="mb-4">Lịch sử quyên góp</h2>
+    <div class="row mb-4">
+
+        <div class="col-md-6 mb-3">
+            <div class="card card-body shadow-sm">
+                <h6 class="text-muted">Tổng tiền quyên góp hợp lệ</h6>
+                <h3 class="text-success">
+                    @(((decimal)ViewBag.TotalAmount).ToString("N0")) VNĐ
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card card-body shadow-sm">
+                <h6 class="text-muted">Số lượt quyên góp hợp lệ</h6>
+                <h3>
+                    @ViewBag.TotalDonations lượt
+                </h3>
+            </div>
+        </div>
+
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>STT</th>
+                        <th>Chiến dịch</th>
+                        <th>Số tiền</th>
+                        <th>Ngày quyên góp</th>
+                        <th>Phương thức</th>
+                        <th>Mã giao dịch</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@stt</td>
+
+                            <td>
+                                @(item.Campaign != null
+                                    ? item.Campaign.Title
+                                    : "Không xác định")
+                            </td>
+
+                            <td>
+                                @item.Amount.ToString("N0") VNĐ
+                            </td>
+
+                            <td>
+                                @(item.DonatedAt.HasValue
+                                    ? item.DonatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+                                    : "Chưa xác định")
+                            </td>
+
+                            <td>@item.PaymentMethod</td>
+
+                            <td>@item.TransactionCode</td>
+
+                            <td>
+                                @if (item.Status == 1)
+                                {
+                                    <span class="badge bg-success">
+                                        Hợp lệ
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Trạng thái: @(item.Status.HasValue
+                                            ? item.Status.Value.ToString()
+                                            : "Chưa xác định")
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+
+                        stt++;
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Bạn chưa có lịch sử quyên góp nào.
+        </div>
+    }
+
+    <a href="@Url.Action("Index", "Campaign")"
+       class="btn btn-outline-primary mt-3">
+        Xem các chiến dịch
+    </a>
+
+</div>
