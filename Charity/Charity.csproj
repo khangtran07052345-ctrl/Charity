@@ -256,7 +256,6 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\CampaignImages\bao-lu.jpg" />
-    <Content Include="Content\CampaignImages\DuAn.jpg" />
     <Content Include="Content\CampaignImages\images %281%29.jpg" />
     <Content Include="Content\CampaignImages\images %282%29.jpg" />
     <Content Include="Content\Image\1.jpg" />
@@ -267,8 +266,8 @@
     <Content Include="Content\Image\images %284%29.jpg" />
     <Content Include="Content\Image\images %285%29.jpg" />
     <Content Include="Content\Image\images.jpg" />
-    <Content Include="Content\Image\OdKKvUkjZc80yRzXHQLyxjGXBEKBdSVuz8cKLuwBvDWsiXCGYmuD3oJpnf6SEiOJV9DPsGqa0JTODGmEunpEvvXOakp6WyT78NsYT9qK2uy_1UKEPvdFZWf4lsoCigTwHrn0NlEZs42q0K4o56baoeSSBvP3QpUNDcAXzJ02iqBC8lBUu6CQFSJi6MHvK_91.jpg" />
-    <Content Include="Content\Image\OLnIlR--kCP-yzwyt1F56zNnqxXcpDEhK1MP3E1LaRrJayyQ36IHoj3dZP4cUUoYlnWEDmzcWeOPb2eoZpqONTbO-LXsbQp8UCMGxEC3mYR40GsC_y2ox6_dFOoO6yPqOfYNZ_08-kiBLvkcUcwI52ogb1ZUy74N-hkeQFMXfeTRyyE_6yLFMMDnoAOYSUA3.jpg" />
+    <Content Include="Content\Image\backgroundlogin1.jpg" />
+    <Content Include="Content\Image\background2.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
