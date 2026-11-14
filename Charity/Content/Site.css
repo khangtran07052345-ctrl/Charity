@@ -31,8 +31,8 @@ body.charity-auth-body {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('image/backgroundlogin1.jpg') center center / cover no-repeat;
-    background-image: url('image/backgroundlogin1.jpg');
+    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('Images/halong.jpg') center center / cover no-repeat;
+    background-image: url('campaignimages/vinhhalong.jpg');
 }
 
 .charity-auth-page {
