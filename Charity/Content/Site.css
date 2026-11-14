@@ -31,8 +31,8 @@ body.charity-auth-body {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('Images/halong.jpg') center center / cover no-repeat;
-    background-image: url('image/odkkvukjzc80yrzxhqlyxjgxbekbdsvuz8ckluwbvdwsixcgymud3ojpnf6seiojv9dpsgqa0jtodgmeunpevvxoakp6wyt78nsyt9qk2uy_1ukepvdfzwf4lsocigtwhrn0nlezs42q0k4o56baoessbvp3qpundcaxzj02iqbc8lbuu6cqfsji6mhvk_91.jpg');
+    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('image/backgroundlogin1.jpg') center center / cover no-repeat;
+    background-image: url('image/backgroundlogin1.jpg');
 }
 
 .charity-auth-page {
