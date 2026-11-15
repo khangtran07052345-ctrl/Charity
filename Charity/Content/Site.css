@@ -20,21 +20,22 @@ textarea {
 }
 
 /* ===== CHARITY LOGIN & REGISTER ===== */
-
 body.charity-auth-body {
     margin: 0;
     min-height: 100vh;
     color: white;
-    background: linear-gradient( rgba(5, 25, 45, 0.35), rgba(5, 25, 45, 0.50) ), url('/Content/Image/backgroundLogin.jpg');
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background: #09243b;
+}
+
+.charity-auth-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(rgba(5, 25, 45, 0.45), rgba(5, 25, 45, 0.65)), url('Images/halong.jpg') center center / cover no-repeat;
+    background-image: url('campaignimages/vinhhalong.jpg');
 }
 
 .charity-auth-page {
-    position: relative;
-    z-index: 1;
     min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
@@ -42,6 +43,7 @@ body.charity-auth-body {
     padding: 35px 20px;
     gap: 60px;
 }
+
 .charity-auth-intro {
     width: 42%;
     max-width: 500px;
@@ -173,6 +175,7 @@ body.charity-auth-body {
         padding: 23px;
     }
 }
+
 /* ===== DANH SÁCH CHIẾN DỊCH CHARITY ===== */
 .campaign-card {
     width: 100%;
