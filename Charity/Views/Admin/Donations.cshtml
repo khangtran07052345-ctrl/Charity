@@ -1,5 +1,4 @@
-﻿
-@using System.Linq
+﻿@using System.Linq
 @model IEnumerable<Charity.Models.Donation>
 
 @{
@@ -16,6 +15,11 @@
 }
 
 <div class="container mt-4 mb-5">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
 
     <!-- Tiêu đề -->
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
@@ -89,13 +93,22 @@
             {
                 <div class="row g-3">
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Từ khóa</label>
                         <input type="text"
                                name="keyword"
                                value="@ViewBag.Keyword"
                                class="form-control"
-                               placeholder="Mã giao dịch, tên người dùng hoặc chiến dịch..." />
+                               placeholder="Mã giao dịch, người dùng, chiến dịch, hiện vật..." />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Loại</label>
+                        <select name="type" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="Money" @((string)ViewBag.Type == "Money" ? "selected" : "")>Tiền</option>
+                            <option value="InKind" @((string)ViewBag.Type == "InKind" ? "selected" : "")>Hiện vật</option>
+                        </select>
                     </div>
 
                     <div class="col-md-3">
@@ -115,7 +128,7 @@
 
                             <option value="2"
                                     @(ViewBag.Status != null && (int)ViewBag.Status == 2 ? "selected" : "")>
-                                Trạng thái khác
+                                Từ chối
                             </option>
                         </select>
                     </div>
@@ -155,10 +168,11 @@
                             <th>Mã giao dịch</th>
                             <th>Người quyên góp</th>
                             <th>Chiến dịch</th>
-                            <th>Số tiền</th>
+                            <th>Số tiền / Hiện vật</th>
                             <th>Thời gian</th>
                             <th>Phương thức</th>
                             <th>Trạng thái</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
 
@@ -209,8 +223,27 @@
                                             : "Không xác định")
                                     </td>
 
-                                    <td class="text-nowrap fw-bold text-success">
-                                        @d.Amount.ToString("N0") đ
+                                    <td>
+                                        @if (d.DonationType == "InKind")
+                                        {
+                                            <div class="fw-bold text-info">
+                                                📦 @(d.Quantity.HasValue ? d.Quantity.Value.ToString("0.##") : "") @d.Unit @d.ItemName
+                                            </div>
+                                            <small class="text-muted d-block">Giao: @d.DeliveryMethod</small>
+                                            <small class="text-muted d-block">SĐT: @d.ContactPhone</small>
+                                            if (!string.IsNullOrWhiteSpace(d.PickupAddress))
+                                            {
+                                                <small class="text-muted d-block">ĐC: @d.PickupAddress</small>
+                                            }
+                                            if (d.EstimatedValue.HasValue)
+                                            {
+                                                <small class="text-muted d-block">Ước tính: @d.EstimatedValue.Value.ToString("N0") đ</small>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-nowrap fw-bold text-success">@d.Amount.ToString("N0") đ</span>
+                                        }
                                     </td>
 
                                     <td class="text-nowrap">
@@ -228,23 +261,41 @@
                                     <td>
                                         @if (d.Status == 1)
                                         {
-                                            <span class="badge rounded-pill bg-success">
-                                                Hợp lệ
-                                            </span>
+                                            <span class="badge rounded-pill bg-success">Hợp lệ</span>
                                         }
                                         else if (d.Status == 0)
                                         {
-                                            <span class="badge rounded-pill bg-warning text-dark">
-                                                Chưa xác nhận
-                                            </span>
+                                            <span class="badge rounded-pill bg-warning text-dark">Chưa xác nhận</span>
+                                        }
+                                        else if (d.Status == 2)
+                                        {
+                                            <span class="badge rounded-pill bg-danger">Từ chối</span>
                                         }
                                         else
                                         {
-                                            <span class="badge rounded-pill bg-secondary">
-                                                Trạng thái: @(d.Status.HasValue
-                                                    ? d.Status.Value.ToString()
-                                                    : "Không xác định")
-                                            </span>
+                                            <span class="badge rounded-pill bg-secondary">Không xác định</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-nowrap">
+                                        @if (d.Status == 0)
+                                        {
+                                            using (Html.BeginForm("ConfirmDonation", "Admin", FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@d.Id" />
+                                                <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
+                                            }
+                                            using (Html.BeginForm("RejectDonation", "Admin", FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@d.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Từ chối</button>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
                                         }
                                     </td>
                                 </tr>
@@ -255,7 +306,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="8" class="text-center py-5">
+                                <td colspan="9" class="text-center py-5">
                                     <div class="text-muted mb-2">
                                         Không tìm thấy giao dịch nào.
                                     </div>

@@ -64,7 +64,14 @@
                             </td>
 
                             <td>
-                                @item.Amount.ToString("N0") VNĐ
+                                @if (item.DonationType == "InKind")
+                                {
+                                    <span>📦 @(item.Quantity.HasValue ? item.Quantity.Value.ToString("0.##") : "") @item.Unit @item.ItemName</span>
+                                }
+                                else
+                                {
+                                    <span>@item.Amount.ToString("N0") VNĐ</span>
+                                }
                             </td>
 
                             <td>
@@ -80,17 +87,19 @@
                             <td>
                                 @if (item.Status == 1)
                                 {
-                                    <span class="badge bg-success">
-                                        Hợp lệ
-                                    </span>
+                                    <span class="badge bg-success">Hợp lệ</span>
+                                }
+                                else if (item.Status == 0)
+                                {
+                                    <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <span class="badge bg-danger">Từ chối</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">
-                                        Trạng thái: @(item.Status.HasValue
-                                            ? item.Status.Value.ToString()
-                                            : "Chưa xác định")
-                                    </span>
+                                    <span class="badge bg-secondary">Chưa xác định</span>
                                 }
                             </td>
                         </tr>

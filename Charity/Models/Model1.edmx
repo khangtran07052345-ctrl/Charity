@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CharityDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CharityDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Campaigns">
           <Key>
             <PropertyRef Name="Id" />
@@ -42,6 +42,14 @@
           <Property Name="Message" Type="nvarchar" MaxLength="500" />
           <Property Name="Status" Type="int" />
           <Property Name="IsAnonymous" Type="bit" />
+          <Property Name="DonationType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="30" />
+          <Property Name="EstimatedValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DeliveryMethod" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactPhone" Type="varchar" MaxLength="20" />
+          <Property Name="PickupAddress" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -109,8 +117,7 @@
             <End Role="Donations" EntitySet="Donations" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CharityDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -156,6 +163,14 @@
           <Property Name="IsAnonymous" Type="Boolean" />
           <NavigationProperty Name="Campaign" Relationship="Self.FK_Donations_Campaigns" FromRole="Donations" ToRole="Campaigns" />
           <NavigationProperty Name="User" Relationship="Self.FK_Donations_Users" FromRole="Donations" ToRole="Users" />
+          <Property Name="DonationType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="EstimatedValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DeliveryMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PickupAddress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -258,6 +273,14 @@
           <EntitySetMapping Name="Donations">
             <EntityTypeMapping TypeName="CharityDBModel.Donation">
               <MappingFragment StoreEntitySet="Donations">
+                <ScalarProperty Name="PickupAddress" ColumnName="PickupAddress" />
+                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+                <ScalarProperty Name="DeliveryMethod" ColumnName="DeliveryMethod" />
+                <ScalarProperty Name="EstimatedValue" ColumnName="EstimatedValue" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="DonationType" ColumnName="DonationType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="TransactionCode" ColumnName="TransactionCode" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />

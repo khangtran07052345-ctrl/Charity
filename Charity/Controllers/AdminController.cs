@@ -287,7 +287,7 @@ namespace Charity.Controllers
         // =========================
         // QUẢN LÝ QUYÊN GÓP
         // =========================
-        public ActionResult Donations(string keyword, int? status)
+        public ActionResult Donations(string keyword, int? status, string type)
         {
             var denied = RequireAdmin();
             if (denied != null) return denied;
@@ -302,14 +302,19 @@ namespace Charity.Controllers
                 query = query.Where(d =>
                     d.TransactionCode.Contains(keyword) ||
                     d.User.FullName.Contains(keyword) ||
-                    d.Campaign.Title.Contains(keyword));
+                    d.Campaign.Title.Contains(keyword) ||
+                    d.ItemName.Contains(keyword));
             }
 
             if (status.HasValue)
                 query = query.Where(d => d.Status == status.Value);
 
+            if (!string.IsNullOrWhiteSpace(type))
+                query = query.Where(d => d.DonationType == type);
+
             ViewBag.Keyword = keyword;
             ViewBag.Status = status;
+            ViewBag.Type = type;
 
             ViewBag.ValidTotal =
                 query.Where(d => d.Status == 1)
@@ -319,6 +324,48 @@ namespace Charity.Controllers
             return View(
                 query.OrderByDescending(d => d.DonatedAt).ToList()
             );
+        }
+
+        // Xác nhận đã nhận hiện vật
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfirmDonation(int id)
+        {
+            var denied = RequireAdmin();
+            if (denied != null) return denied;
+
+            var d = database.Donations.Find(id);
+            if (d == null) return HttpNotFound();
+
+            if (d.Status == 0)
+            {
+                d.Status = 1;
+                database.SaveChanges();
+                TempData["Success"] = "Đã xác nhận khoản quyên góp " + d.TransactionCode + ".";
+            }
+
+            return RedirectToAction("Donations");
+        }
+
+        // Từ chối khoản quyên góp
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RejectDonation(int id)
+        {
+            var denied = RequireAdmin();
+            if (denied != null) return denied;
+
+            var d = database.Donations.Find(id);
+            if (d == null) return HttpNotFound();
+
+            if (d.Status == 0)
+            {
+                d.Status = 2;
+                database.SaveChanges();
+                TempData["Success"] = "Đã từ chối khoản quyên góp " + d.TransactionCode + ".";
+            }
+
+            return RedirectToAction("Donations");
         }
 
         // =========================

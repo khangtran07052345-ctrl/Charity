@@ -11,7 +11,7 @@ namespace Charity.Models
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Donation
     {
         public int Id { get; set; }
@@ -24,7 +24,15 @@ namespace Charity.Models
         public string Message { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<bool> IsAnonymous { get; set; }
-
+        public string DonationType { get; set; }
+        public string ItemName { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
+        public string Unit { get; set; }
+        public Nullable<decimal> EstimatedValue { get; set; }
+        public string DeliveryMethod { get; set; }
+        public string ContactPhone { get; set; }
+        public string PickupAddress { get; set; }
+    
         public virtual Campaign Campaign { get; set; }
         public virtual User User { get; set; }
     }

@@ -1,138 +1,332 @@
-﻿@model Charity.Models.Donation
+﻿@using System.Linq
+@model Charity.Models.Donation
 
 @{
-    ViewBag.Title = "Quyên góp mô phỏng";
+    ViewBag.Title = "Quyên góp";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var campaign = ViewBag.Campaign as Charity.Models.Campaign;
+    var moneyMethods = ViewBag.MoneyMethods as string[];
+    var deliveryMethods = ViewBag.DeliveryMethods as string[];
+
+    bool isInKind = Model.DonationType == "InKind";
+    string selMethod = (!string.IsNullOrEmpty(Model.PaymentMethod) && moneyMethods.Contains(Model.PaymentMethod))
+        ? Model.PaymentMethod : moneyMethods[0];
 }
 
 <div class="container mt-4 mb-5" style="max-width: 760px">
 
-    <h2 class="mb-4">Quyên góp mô phỏng</h2>
+    <h2 class="mb-4">Quyên góp</h2>
 
     @if (campaign != null)
     {
         <div class="alert alert-info">
             <h5 class="mb-2">@campaign.Title</h5>
-
-            <div>
-                Mục tiêu:
-                <strong>@campaign.TargetAmount.ToString("N0") VNĐ</strong>
-            </div>
-
-            <small>
-                Đây là giao dịch demo, không thực hiện chuyển tiền thật.
-            </small>
+            <div>Mục tiêu: <strong>@campaign.TargetAmount.ToString("N0") VNĐ</strong></div>
+            <small>Đây là giao dịch demo, không thực hiện chuyển tiền thật.</small>
         </div>
     }
 
-    @using (Html.BeginForm(
-        "Create",
-        "Donation",
-        FormMethod.Post,
-        new { @class = "card card-body shadow-sm" }))
+    @using (Html.BeginForm("Create", "Donation", FormMethod.Post,
+        new { @class = "card card-body shadow-sm", id = "donateForm" }))
     {
         @Html.AntiForgeryToken()
-
         @Html.HiddenFor(m => m.CampaignId)
+        @Html.HiddenFor(m => m.DonationType)
+        @Html.HiddenFor(m => m.TransactionCode)
 
-        @Html.ValidationSummary(
-            false,
-            "Vui lòng kiểm tra thông tin:",
-            new { @class = "alert alert-danger" })
+        @Html.ValidationSummary(false, "Vui lòng kiểm tra thông tin:", new { @class = "alert alert-danger" })
 
-        <div class="mb-3">
-            <label for="Amount" class="form-label">
-                Số tiền quyên góp (VNĐ) *
-            </label>
-
-            @Html.TextBoxFor(m => m.Amount, new
-            {
-                @class = "form-control",
-                type = "number",
-                min = "1",
-                max = "1000000000000",
-                step = "1",
-                required = "required",
-                placeholder = "Ví dụ: 100000"
-            })
-
-            @Html.ValidationMessageFor(
-                m => m.Amount,
-                "",
-                new { @class = "text-danger" })
-
-            <small class="text-muted">
-                Nhập số tiền nguyên VNĐ, ví dụ 100000 hoặc 1000000.
-            </small>
+        <!-- Chọn loại quyên góp -->
+        <div class="btn-group w-100 mb-4" role="group">
+            <button type="button" id="tabMoney" class="btn btn-outline-primary">💰 Quyên góp tiền</button>
+            <button type="button" id="tabKind" class="btn btn-outline-primary">📦 Quyên góp hiện vật</button>
         </div>
 
-        <div class="mb-3">
-            <label for="PaymentMethod" class="form-label">
-                Phương thức quyên góp
-            </label>
+        <!-- ================= TIỀN ================= -->
+        <fieldset id="moneyBox">
 
-            @Html.DropDownListFor(
-                m => m.PaymentMethod,
-                new SelectList(
-                    new[]
+            <div class="mb-3">
+                <label class="form-label">Chọn nhanh số tiền</label>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var a in new[] { 50000, 100000, 200000, 500000, 1000000 })
                     {
-                        new { Value = "Mô phỏng", Text = "Mô phỏng" },
-                        new { Value = "Chuyển khoản demo", Text = "Chuyển khoản demo" },
-                        new { Value = "Ví điện tử demo", Text = "Ví điện tử demo" }
-                    },
-                    "Value",
-                    "Text",
-                    Model.PaymentMethod ?? "Mô phỏng"
-                ),
-                new { @class = "form-select" })
-        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm quick-amount" data-amount="@a">
+                            @a.ToString("N0")đ
+                        </button>
+                    }
+                </div>
+            </div>
 
+            <div class="mb-3">
+                <label for="Amount" class="form-label">Số tiền quyên góp (VNĐ) *</label>
+                @Html.TextBox("Amount", Model.Amount > 0 ? Model.Amount.ToString("0") : "", new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    min = "1",
+                    max = "1000000000000",
+                    step = "1",
+                    required = "required",
+                    placeholder = "Ví dụ: 100000"
+                })
+                @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phương thức thanh toán</label>
+                @foreach (var m in moneyMethods)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input pay-method" type="radio" name="PaymentMethod"
+                               id="pm_@(Array.IndexOf(moneyMethods, m))" value="@m"
+                               @(m == selMethod ? "checked" : "") />
+                        <label class="form-check-label" for="pm_@(Array.IndexOf(moneyMethods, m))">@m</label>
+                    </div>
+                }
+            </div>
+
+            <!-- Thông tin chuyển khoản + QR -->
+            <div id="bankPanel" class="border rounded p-3 mb-3 bg-light"
+                 data-bank="@ViewBag.BankCode" data-acc="@ViewBag.BankAccountNo" data-name="@ViewBag.BankAccountName">
+                <div class="row g-3">
+                    <div class="col-md-7">
+                        <div class="mb-2"><span class="text-muted">Ngân hàng:</span> <strong>@ViewBag.BankName</strong></div>
+                        <div class="mb-2">
+                            <span class="text-muted">Số tài khoản:</span>
+                            <strong id="accNo">@ViewBag.BankAccountNo</strong>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-1 copy-btn" data-target="accNo">Copy</button>
+                        </div>
+                        <div class="mb-2"><span class="text-muted">Chủ tài khoản:</span> <strong>@ViewBag.BankAccountName</strong></div>
+                        <div class="mb-2">
+                            <span class="text-muted">Số tiền:</span>
+                            <strong id="amountText" class="text-success">0</strong> VNĐ
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Nội dung chuyển khoản:</span>
+                            <strong id="transferCode">@Model.TransactionCode</strong>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-1 copy-btn" data-target="transferCode">Copy</button>
+                        </div>
+                        <small class="text-muted">Vui lòng giữ nguyên nội dung chuyển khoản để hệ thống đối soát. (Demo)</small>
+                    </div>
+                    <div class="col-md-5 text-center">
+                        <img id="qrImg" src="" alt="QR chuyển khoản" class="img-fluid border rounded bg-white" style="max-width: 220px" />
+                        <div><small class="text-muted">Quét bằng app ngân hàng</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin ví -->
+            <div id="walletPanel" class="border rounded p-3 mb-3 bg-light" style="display:none">
+                <div class="mb-1">Số ví nhận (demo): <strong>@ViewBag.EWalletPhone</strong></div>
+                <small class="text-muted">Mở ví, chọn "Chuyển tiền", nhập số ví trên và số tiền đã nhập phía trên. (Demo)</small>
+            </div>
+        </fieldset>
+
+        <!-- ================= HIỆN VẬT ================= -->
+        <fieldset id="kindBox" style="display:none">
+
+            <div class="mb-3">
+                <label for="ItemName" class="form-label">Tên hiện vật *</label>
+                @Html.TextBox("ItemName", Model.ItemName, new
+                {
+                    @class = "form-control",
+                    maxlength = "200",
+                    required = "required",
+                    placeholder = "Ví dụ: Gạo ST25, mì gói, áo ấm, sách vở..."
+                })
+                @Html.ValidationMessageFor(m => m.ItemName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Quantity" class="form-label">Số lượng *</label>
+                    @Html.TextBox("Quantity", Model.Quantity.HasValue ? Model.Quantity.Value.ToString("0") : "", new
+                    {
+                        @class = "form-control",
+                        type = "number",
+                        min = "1",
+                        step = "1",
+                        required = "required"
+                    })
+                    @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="Unit" class="form-label">Đơn vị *</label>
+                    @Html.TextBox("Unit", Model.Unit, new
+                    {
+                        @class = "form-control",
+                        maxlength = "30",
+                        list = "unitList",
+                        required = "required",
+                        placeholder = "kg, bao, thùng, bộ..."
+                    })
+                    <datalist id="unitList">
+                        <option value="kg"></option>
+                        <option value="bao"></option>
+                        <option value="thùng"></option>
+                        <option value="hộp"></option>
+                        <option value="chai"></option>
+                        <option value="bộ"></option>
+                        <option value="cái"></option>
+                    </datalist>
+                    @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="EstimatedValue" class="form-label">Giá trị ước tính (VNĐ, không bắt buộc)</label>
+                @Html.TextBox("EstimatedValue", Model.EstimatedValue.HasValue ? Model.EstimatedValue.Value.ToString("0") : "", new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    min = "0",
+                    step = "1",
+                    placeholder = "Chỉ để tham khảo, không cộng vào số tiền đã quyên góp"
+                })
+                @Html.ValidationMessageFor(m => m.EstimatedValue, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="mb-3">
+                <label for="DeliveryMethod" class="form-label">Hình thức giao hàng *</label>
+                <select name="DeliveryMethod" id="DeliveryMethod" class="form-select" required>
+                    @foreach (var d in deliveryMethods)
+                    {
+                        <option value="@d" @(Model.DeliveryMethod == d ? "selected" : "")>@d</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(m => m.DeliveryMethod, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="mb-3">
+                <label for="ContactPhone" class="form-label">Số điện thoại liên hệ *</label>
+                @Html.TextBox("ContactPhone", Model.ContactPhone, new
+                {
+                    @class = "form-control",
+                    maxlength = "11",
+                    required = "required",
+                    placeholder = "0901234567"
+                })
+                @Html.ValidationMessageFor(m => m.ContactPhone, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="mb-3">
+                <label for="PickupAddress" class="form-label">Địa chỉ (bắt buộc nếu chọn "Nhờ đến lấy")</label>
+                @Html.TextArea("PickupAddress", Model.PickupAddress, 2, 10, new
+                {
+                    @class = "form-control",
+                    maxlength = "300",
+                    placeholder = "Số nhà, đường, quận/huyện, tỉnh/thành..."
+                })
+                @Html.ValidationMessageFor(m => m.PickupAddress, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="alert alert-warning py-2">
+                <small>Quyên góp hiện vật sẽ ở trạng thái <strong>chờ xác nhận</strong> cho đến khi quản trị viên xác nhận đã nhận hàng.</small>
+            </div>
+        </fieldset>
+
+        <!-- ================= DÙNG CHUNG ================= -->
         <div class="mb-3">
-            <label for="Message" class="form-label">
-                Lời nhắn
-            </label>
-
+            <label for="Message" class="form-label">Lời nhắn</label>
             @Html.TextAreaFor(m => m.Message, 3, 10, new
             {
                 @class = "form-control",
                 maxlength = "500",
                 placeholder = "Gửi lời nhắn đến chiến dịch..."
             })
-
-            @Html.ValidationMessageFor(
-                m => m.Message,
-                "",
-                new { @class = "text-danger" })
-
-            <small class="text-muted">
-                Tối đa 500 ký tự.
-            </small>
+            @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+            <small class="text-muted">Tối đa 500 ký tự.</small>
         </div>
 
         <div class="form-check mb-4">
-            @Html.CheckBox(
-                "IsAnonymous",
-                Model.IsAnonymous ?? false,
-                new { @class = "form-check-input" })
-
-            <label class="form-check-label" for="IsAnonymous">
-                Hiển thị ẩn danh
-            </label>
+            @Html.CheckBox("IsAnonymous", Model.IsAnonymous ?? false, new { @class = "form-check-input" })
+            <label class="form-check-label" for="IsAnonymous">Hiển thị ẩn danh</label>
         </div>
 
         <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">
-                ♥ Xác nhận quyên góp demo
-            </button>
-
-            @Html.ActionLink(
-                "Hủy",
-                "Details",
-                "Campaign",
-                new { id = Model.CampaignId },
-                new { @class = "btn btn-outline-secondary" })
+            <button type="submit" id="submitBtn" class="btn btn-primary">♥ Xác nhận</button>
+            @Html.ActionLink("Hủy", "Details", "Campaign", new { id = Model.CampaignId }, new { @class = "btn btn-outline-secondary" })
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+(function () {
+            var typeInput = document.getElementById('DonationType');
+            var moneyBox = document.getElementById('moneyBox');
+            var kindBox = document.getElementById('kindBox');
+            var tabMoney = document.getElementById('tabMoney');
+            var tabKind = document.getElementById('tabKind');
+            var submitBtn = document.getElementById('submitBtn');
+            var amountInput = document.getElementById('Amount');
+            var bankPanel = document.getElementById('bankPanel');
+            var walletPanel = document.getElementById('walletPanel');
+            var qrImg = document.getElementById('qrImg');
+            var amountText = document.getElementById('amountText');
+            var code = document.getElementById('transferCode').textContent.trim();
+
+            function isBank() {
+                var r = document.querySelector('input.pay-method:checked');
+                return !r || r.value.indexOf('Chuyển khoản') === 0;
+            }
+
+            function updatePayment() {
+                var bank = isBank();
+                bankPanel.style.display = bank ? '' : 'none';
+                walletPanel.style.display = bank ? 'none' : '';
+                var amt = parseInt(amountInput.value, 10) || 0;
+                amountText.textContent = amt.toLocaleString('vi-VN');
+                if (bank) {
+                    qrImg.src = 'https://img.vietqr.io/image/' + bankPanel.dataset.bank + '-' + bankPanel.dataset.acc +
+                                '-compact2.png?amount=' + amt +
+                                '&addInfo=' + encodeURIComponent(code) +
+                                '&accountName=' + encodeURIComponent(bankPanel.dataset.name);
+                }
+                if (typeInput.value === 'Money') {
+                    submitBtn.textContent = bank ? '✔ Tôi đã chuyển khoản' : '♥ Xác nhận quyên góp';
+                }
+            }
+
+            function setType(t) {
+                typeInput.value = t;
+                var money = (t === 'Money');
+                moneyBox.disabled = !money;               // fieldset disabled => không gửi & không bắt buộc nhập
+                kindBox.disabled = money;
+                moneyBox.style.display = money ? '' : 'none';
+                kindBox.style.display = money ? 'none' : '';
+                tabMoney.classList.toggle('active', money);
+                tabKind.classList.toggle('active', !money);
+                if (money) { updatePayment(); } else { submitBtn.textContent = '📦 Gửi đăng ký quyên góp hiện vật'; }
+            }
+
+            tabMoney.addEventListener('click', function () { setType('Money'); });
+            tabKind.addEventListener('click', function () { setType('InKind'); });
+
+            document.querySelectorAll('.quick-amount').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    amountInput.value = b.dataset.amount;
+                    updatePayment();
+                });
+            });
+            amountInput.addEventListener('input', updatePayment);
+            document.querySelectorAll('.pay-method').forEach(function (r) {
+                r.addEventListener('change', updatePayment);
+            });
+
+            document.querySelectorAll('.copy-btn').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var text = document.getElementById(b.dataset.target).textContent.trim();
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(text).then(function () {
+                            var old = b.textContent; b.textContent = 'Đã copy'; setTimeout(function () { b.textContent = old; }, 1200);
+                        });
+                    }
+                });
+            });
+
+            setType(typeInput.value === 'InKind' ? 'InKind' : 'Money');
+})();
+    </script>
+}
