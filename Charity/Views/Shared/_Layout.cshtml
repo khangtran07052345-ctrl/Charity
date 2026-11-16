@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - CHARITY</title>
+    <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "") LTW Charity Website (CWS)</title>
+    <!--Logo hiển thị trên web trình duyệt -->
+    <link rel="icon" type="image/jpg"
+          href="@Url.Content("~/Content/Image/Charity_icon_web.jpg")"/>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
