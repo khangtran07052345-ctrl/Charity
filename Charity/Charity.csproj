@@ -385,6 +385,7 @@
     <Content Include="Views\Admin\EditCampaign.cshtml" />
     <Content Include="Views\Donation\Create.cshtml" />
     <Content Include="Views\Donation\History.cshtml" />
+    <Content Include="Views\Shared\_AuthLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
