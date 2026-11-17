@@ -5,8 +5,12 @@
     ViewBag.Title = "Sửa chiến dịch";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
 
-<div class="container mt-4 mb-5" style="max-width: 850px">
+<div class="container charity-admin-page mt-4 mb-5" style="max-width: 850px">
 
     <h2 class="mb-4">Sửa chiến dịch #@Model.Id</h2>
 
@@ -25,10 +29,10 @@
         @Html.HiddenFor(m => m.Id)
 
         @Html.ValidationSummary(
-            false,
-            "Vui lòng kiểm tra dữ liệu:",
-            new { @class = "alert alert-danger" }
-        )
+                      false,
+                      "Vui lòng kiểm tra dữ liệu:",
+                      new { @class = "alert alert-danger" }
+                  )
 
         <!-- TÊN CHIẾN DỊCH -->
         <div class="mb-3">
@@ -44,10 +48,10 @@
             })
 
             @Html.ValidationMessageFor(
-                m => m.Title,
-                "",
-                new { @class = "text-danger" }
-            )
+                          m => m.Title,
+                          "",
+                          new { @class = "text-danger" }
+                      )
         </div>
 
         <!-- DANH MỤC -->
@@ -57,11 +61,11 @@
             </label>
 
             @Html.DropDownList(
-                "CategoryId",
-                (SelectList)ViewBag.CategoryId,
-                "-- Không chọn --",
-                new { @class = "form-select" }
-            )
+                          "CategoryId",
+                          (SelectList)ViewBag.CategoryId,
+                          "-- Không chọn --",
+                          new { @class = "form-select" }
+                      )
         </div>
 
         <!-- MÔ TẢ -->
@@ -77,10 +81,10 @@
             })
 
             @Html.ValidationMessageFor(
-                m => m.Description,
-                "",
-                new { @class = "text-danger" }
-            )
+                          m => m.Description,
+                          "",
+                          new { @class = "text-danger" }
+                      )
         </div>
 
         <!-- MỤC TIÊU -->
@@ -103,10 +107,10 @@
             </small>
 
             @Html.ValidationMessageFor(
-                m => m.TargetAmount,
-                "",
-                new { @class = "text-danger" }
-            )
+                          m => m.TargetAmount,
+                          "",
+                          new { @class = "text-danger" }
+                      )
         </div>
 
         <!-- NGÀY BẮT ĐẦU VÀ KẾT THÚC -->
@@ -125,10 +129,10 @@
                        required />
 
                 @Html.ValidationMessage(
-                    "StartDate",
-                    "",
-                    new { @class = "text-danger" }
-                )
+                              "StartDate",
+                              "",
+                              new { @class = "text-danger" }
+                          )
             </div>
 
             <div class="col-md-6 mb-3">
@@ -144,10 +148,10 @@
                        required />
 
                 @Html.ValidationMessage(
-                    "EndDate",
-                    "",
-                    new { @class = "text-danger" }
-                )
+                              "EndDate",
+                              "",
+                              new { @class = "text-danger" }
+                          )
             </div>
 
         </div>
@@ -171,10 +175,10 @@
             </small>
 
             @Html.ValidationMessage(
-                "ImageUrl",
-                "",
-                new { @class = "text-danger" }
-            )
+                          "ImageUrl",
+                          "",
+                          new { @class = "text-danger" }
+                      )
 
             <div class="mt-3">
 
@@ -213,26 +217,26 @@
             </label>
 
             @Html.DropDownListFor(
-                m => m.Status,
-                new SelectList(
-                    new[]
-                    {
+                          m => m.Status,
+                          new SelectList(
+                              new[]
+                              {
                         new { Value = 0, Text = "Đang hoạt động" },
                         new { Value = 1, Text = "Đã đóng" },
                         new { Value = 2, Text = "Hoàn thành" }
-                    },
-                    "Value",
-                    "Text",
-                    Model.Status ?? 0
-                ),
-                new { @class = "form-select" }
-            )
+                                      },
+                              "Value",
+                              "Text",
+                              Model.Status ?? 0
+                          ),
+                          new { @class = "form-select" }
+                      )
 
             @Html.ValidationMessageFor(
-                m => m.Status,
-                "",
-                new { @class = "text-danger" }
-            )
+                          m => m.Status,
+                          "",
+                          new { @class = "text-danger" }
+                      )
         </div>
 
         <!-- NÚT -->
@@ -244,12 +248,12 @@
             </button>
 
             @Html.ActionLink(
-                "Hủy",
-                "Campaigns",
-                "Admin",
-                null,
-                new { @class = "btn btn-outline-secondary" }
-            )
+                          "Hủy",
+                          "Campaigns",
+                          "Admin",
+                          null,
+                          new { @class = "btn btn-outline-secondary" }
+                      )
 
         </div>
     }

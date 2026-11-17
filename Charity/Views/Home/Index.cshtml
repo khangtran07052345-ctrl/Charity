@@ -1,328 +1,706 @@
-﻿@model List<Charity.Models.CampaignViewModel>
+﻿
+@model List<Charity.Models.CampaignViewModel>
 @using System.Globalization
+@using System.Linq
 
 @{
     ViewBag.Title = "Trang chủ";
     var vi = new CultureInfo("vi-VN");
 }
-<style>
-    .charity-home {
-        color: #123567;
-        font-family: Arial, sans-serif;
-    }
 
-    .hero {
-        background: linear-gradient(110deg, #e7f3ff, #f7fbff);
-        border-radius: 16px;
-        padding: 55px 35px;
-        margin: 15px 0 45px;
-    }
-
-        .hero h1 {
-            font-size: 42px;
-            font-weight: bold;
-            line-height: 1.25;
-            margin: 15px 0;
-        }
-
-        .hero p {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #526984;
-        }
-
-    .btn-charity {
-        background: #0866d9;
-        color: white !important;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 20px;
-        text-decoration: none;
-        display: inline-block;
-        margin: 8px 5px 0 0;
-        vertical-align: middle;
-    }
-
-        .btn-charity:hover {
-            background: #064fa9;
-        }
-
-    .section-title {
-        font-size: 28px;
-        font-weight: bold;
-        margin-bottom: 25px;
-    }
-
-    .campaign-card {
-        border: 1px solid #e3eaf2;
-        border-radius: 12px;
-        overflow: hidden;
-        height: 100%;
-        background: white;
-        box-shadow: 0 3px 12px rgba(0, 40, 90, 0.06);
-    }
-
-        .campaign-card img,
-        .campaign-home-image {
-            display: block;
-            width: 100%;
-            height: 175px;
-            object-fit: cover;
-            object-position: center;
-        }
-        
-
-    .campaign-content {
-        padding: 17px;
-    }
-
-        .campaign-content h4 {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 12px 0 8px;
-        }
-
-        .campaign-content p {
-            color: #65758b;
-            font-size: 14px;
-            min-height: 40px;
-        }
-
-    .category {
-        display: inline-block;
-        color: #0866d9;
-        background: #e8f2ff;
-        border-radius: 20px;
-        padding: 5px 12px;
-        font-size: 12px;
-    }
-
-    .progress-track {
-        height: 8px;
-        background: #e6edf4;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 15px 0 8px;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: #2fc477;
-        border-radius: 10px;
-    }
-
-    .money-info {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        font-size: 12px;
-        margin-bottom: 15px;
-    }
-
-        .money-info strong {
-            color: #123567;
-        }
-
-    .campaign-button {
-        display: block;
-        text-align: center;
-        background: #0866d9;
-        color: white !important;
-        text-decoration: none;
-        border-radius: 7px;
-        padding: 10px;
-        font-size: 13px;
-    }
-
-        .campaign-button:hover {
-            background: #064fa9;
-        }
-
-    .impact {
-        background: #edf6ff;
-        border-radius: 14px;
-        padding: 30px 20px;
-        margin: 40px 0 20px;
-        text-align: center;
-    }
-
-    .impact-number {
-        color: #0866d9;
-        font-size: 25px;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    .impact p {
-        color: #526984;
-        font-size: 13px;
-    }
-
-    .campaigns {
-        margin-bottom: 20px;
-    }
-</style>
+@section styles {
+    <link href="@Url.Content("~/Content/charity-home.css")"
+          rel="stylesheet" />
+}
 
 <div class="charity-home">
 
-    <!-- BANNER TRANG CHU -->
-    <section class="hero">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <span style="color:#2585ee;font-weight:bold;">
-                    VÌ MỘT CỘNG ĐỒNG TỐT ĐẸP HƠN
-                </span>
+    <!-- =====================================
+         1. HERO BANNER
+    ====================================== -->
 
-                <h1>Chung tay tạo nên<br />sự thay đổi</h1>
+    <section class="home-hero">
 
-                <p>
-                    Mỗi đóng góp của bạn đều mang lại hy vọng,
-                    giúp đỡ những hoàn cảnh khó khăn và xây dựng
-                    một tương lai tốt đẹp hơn cho cộng đồng.
-                </p>
+        <div class="container home-container">
 
-                <a href="#chien-dich" class="btn-charity">
-                    ♥ Khám phá chiến dịch
-                </a>
+            <div class="row align-items-center g-5">
 
-                <a href="@Url.Action("GioiThieu", "Home")"
-                   class="btn btn-outline-primary"
-                   style="border-radius: 8px; padding: 12px 20px; vertical-align: middle; margin-top:8px;">
-                    Tìm hiểu thêm
-                </a>
+                <div class="col-lg-6">
+
+                    <div class="hero-content reveal">
+
+                        <div class="hero-label">
+                            <span class="hero-label-dot"></span>
+                            CÙNG NHAU LAN TỎA YÊU THƯƠNG
+                        </div>
+
+                        <h1>
+                            Một hành động nhỏ,
+                            <span>ngàn hy vọng lớn.</span>
+                        </h1>
+
+                        <p class="hero-description">
+                            Mỗi sự sẻ chia đều có thể thay đổi một cuộc đời.
+                            Hãy cùng CHARITY kết nối những tấm lòng nhân ái,
+                            chung tay hỗ trợ cộng đồng và xây dựng một tương
+                            lai tốt đẹp hơn.
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <a href="@Url.Action("Index", "Campaign")"
+                               class="home-btn home-btn-primary">
+                                Khám phá chiến dịch
+                                <span>→</span>
+                            </a>
+
+                            <a href="@Url.Action("GioiThieu", "Home")"
+                               class="home-btn home-btn-outline">
+                                Tìm hiểu về chúng tôi
+                            </a>
+
+                        </div>
+
+                        <div class="hero-trust">
+
+                            <div class="hero-trust-icon">♥</div>
+
+                            <div>
+                                <strong>Trao đi yêu thương</strong>
+                                <span>Kết nối những trái tim nhân ái</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="hero-visual reveal">
+
+                        <div class="hero-image-main">
+
+                            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=85"
+                                 alt="Hoạt động thiện nguyện hỗ trợ trẻ em"
+                                 loading="eager" />
+
+                        </div>
+
+                        <div class="hero-image-decoration"></div>
+
+                        <div class="hero-floating-card">
+
+                            <div class="floating-card-icon">♥</div>
+
+                            <div>
+                                <strong>Lan tỏa yêu thương</strong>
+                                <span>Mỗi đóng góp đều ý nghĩa</span>
+                            </div>
+
+                        </div>
+
+                        <div class="hero-image-caption">
+                            <span>SHARE LOVE</span>
+                            <span>CHANGE LIVES</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="col-md-6">
-                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1000&q=80"
-                     alt="Hoạt động thiện nguyện"
-                     style="width:100%;height:300px;object-fit:cover;border-radius:14px;" />
-            </div>
         </div>
+
     </section>
 
-    <!-- DANH SACH CHIEN DICH -->
-    <section id="chien-dich" class="campaigns">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <span style="color:#2585ee;font-size:12px;font-weight:bold;">
-                    CÁC CHIẾN DỊCH NỔI BẬT
-                </span>
-                <h2 class="section-title" style="margin-top:8px;margin-bottom:0;">
-                    Cùng nhau lan tỏa yêu thương
-                </h2>
+
+    <!-- =====================================
+         2. TRUST SECTION
+    ====================================== -->
+
+    <section class="home-trust-section">
+
+        <div class="container home-container">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="trust-item reveal">
+
+                        <div class="trust-icon trust-blue">
+                            <span>✓</span>
+                        </div>
+
+                        <div>
+                            <h3>Minh bạch</h3>
+                            <p>
+                                Hướng đến sự rõ ràng trong từng hoạt động
+                                và nguồn đóng góp.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="trust-item reveal">
+
+                        <div class="trust-icon trust-green">
+                            <span>♡</span>
+                        </div>
+
+                        <div>
+                            <h3>Nhân ái</h3>
+                            <p>
+                                Kết nối những tấm lòng sẻ chia,
+                                cùng hỗ trợ người cần giúp đỡ.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="trust-item reveal">
+
+                        <div class="trust-icon trust-orange">
+                            <span>✦</span>
+                        </div>
+
+                        <div>
+                            <h3>Lan tỏa</h3>
+                            <p>
+                                Góp phần xây dựng một cộng đồng
+                                đoàn kết và tốt đẹp hơn.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="row g-4">
+    </section>
 
-            @if (Model == null || !Model.Any())
-            {
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        Hiện chưa có chiến dịch nào đang diễn ra.
-                    </div>
+
+    <!-- =====================================
+         3. FEATURED CAMPAIGNS
+    ====================================== -->
+
+    <section class="home-campaign-section" id="chien-dich">
+
+        <div class="container home-container">
+
+            <div class="section-heading-wrap reveal">
+
+                <div>
+                    <span class="section-eyebrow">
+                        CHUNG TAY VÌ CỘNG ĐỒNG
+                    </span>
+
+                    <h2 class="home-section-title">
+                        Những chiến dịch nổi bật
+                    </h2>
+
+                    <p class="home-section-description">
+                        Mỗi chiến dịch là một cơ hội để chúng ta
+                        mang đến những điều tốt đẹp cho cuộc sống.
+                    </p>
                 </div>
-            }
-            else
-            {
-                foreach (var c in Model)
+
+                <a href="@Url.Action("Index", "Campaign")"
+                   class="section-view-all">
+                    Xem tất cả chiến dịch →
+                </a>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                @if (Model == null || !Model.Any())
                 {
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="campaign-card">
-                            @if (!string.IsNullOrWhiteSpace(c.ImageUrl))
-                            {
-                                <img src="@Url.Content(c.ImageUrl)"
-                                     alt="@c.Title"
-                                     class="campaign-home-image" />
-                            }
-                            else
-                            {
-                                <img src="@Url.Content("~/Content/Image/images (4).jpg")"
-                                     alt="@c.Title"
-                                     class="campaign-home-image" />
-                            }
-                            <div class="campaign-content">
+                    <div class="col-12">
 
-                                <span class="category">
-                                    @c.StatusText
-                                </span>
+                        <div class="home-empty-state">
 
-                                <h4>
-                                    @c.Title
-                                </h4>
+                            <div class="empty-icon">♡</div>
 
-                                <p>@c.Description</p>
+                            <h3>Chưa có chiến dịch nổi bật</h3>
 
-                                <div class="progress-track">
-                                    <div class="progress-fill"
-                                         style="width: @(Math.Max(0, Math.Min(100, c.ProgressPercent)))%;">
-                                    </div>
-                                </div>
+                            <p>
+                                Hiện tại chưa có chiến dịch nào đang diễn ra.
+                                Hãy quay lại sau nhé!
+                            </p>
 
-                                <div class="money-info">
-                                    <strong>
-                                        @c.RaisedAmount.ToString("N0", vi)đ
-                                    </strong>
+                            <a href="@Url.Action("Index", "Campaign")"
+                               class="home-btn home-btn-primary">
+                                Khám phá chiến dịch
+                            </a>
 
-                                    <strong>@c.ProgressPercent%</strong>
-                                </div>
-
-                                <div class="money-info">
-                                    <span>Đã quyên góp</span>
-
-                                    <span>
-                                        Mục tiêu
-                                        @((c.TargetAmount / 1000000m).ToString("0.##", vi))
-                                        triệu
-                                    </span>
-                                </div>
-
-                                <a href="@Url.Action("Details", "Campaign", new { id = c.Id })"
-                                   class="campaign-button">
-                                    Xem chi tiết
-                                </a>
-
-                            </div>
                         </div>
+
                     </div>
                 }
-            }
-            <!-- THONG KE MINH HOA -->
-            <section id="gioi-thieu" class="impact">
-                <h2 style="font-weight:bold;margin-bottom:10px;">
-                    Chung tay tạo nên những điều ý nghĩa
+                else
+                {
+                    foreach (var c in Model)
+                    {
+                        var progress = Math.Max(
+                            0,
+                            Math.Min(100, c.ProgressPercent)
+                        );
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+
+                            <article class="home-campaign-card reveal">
+
+                                <div class="campaign-image-wrap">
+
+                                    @if (!string.IsNullOrWhiteSpace(c.ImageUrl))
+                                    {
+                                        <img src="@Url.Content(c.ImageUrl)"
+                                             alt="@c.Title"
+                                             loading="lazy"
+                                             onerror="this.onerror=null;this.src='@Url.Content("~/Content/Image/images (4).jpg")';" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@Url.Content("~/Content/Image/images (4).jpg")"
+                                             alt="@c.Title"
+                                             loading="lazy" />
+                                    }
+
+                                    <span class="campaign-status @c.StatusBadgeClass">
+                                        @c.StatusText
+                                    </span>
+
+                                </div>
+
+                                <div class="home-campaign-content">
+
+                                    <h3 title="@c.Title">
+                                        @c.Title
+                                    </h3>
+
+                                    <p class="campaign-description">
+                                        @c.Description
+                                    </p>
+
+                                    <div class="campaign-progress-heading">
+
+                                        <span>Đã quyên góp</span>
+
+                                        <strong>@progress%</strong>
+
+                                    </div>
+
+                                    <div class="campaign-progress-track">
+
+                                        <div class="campaign-progress-fill"
+                                             style="width: @progress%;">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="campaign-money">
+
+                                        <div>
+                                            <strong>
+                                                @c.RaisedAmount.ToString("N0", vi)đ
+                                            </strong>
+
+                                            <span>Đã nhận</span>
+                                        </div>
+
+                                        <div class="campaign-target">
+                                            <strong>
+                                                @c.TargetAmount.ToString("N0", vi)đ
+                                            </strong>
+
+                                            <span>Mục tiêu</span>
+                                        </div>
+
+                                    </div>
+
+                                    <a href="@Url.Action("Details", "Campaign", new { id = c.Id })"
+                                       class="campaign-detail-btn">
+
+                                        Xem chi tiết
+
+                                        <span>→</span>
+
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+                    }
+                }
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         4. IMPACT STATISTICS
+    ====================================== -->
+
+    <section class="home-impact-section">
+
+        <div class="container home-container">
+
+            <div class="impact-heading reveal">
+
+                <span class="section-eyebrow impact-eyebrow">
+                    GIÁ TRỊ CỦA SỰ SẺ CHIA
+                </span>
+
+                <h2>
+                    Cùng nhau tạo nên
+                    <span>những điều ý nghĩa</span>
                 </h2>
 
                 <p>
-                    Mỗi hành động nhỏ đều có thể mang đến sự thay đổi tích cực.
+                    Một cộng đồng tốt đẹp được tạo nên từ những
+                    hành động tử tế mỗi ngày.
                 </p>
 
-                <div class="row mt-4">
-                    <div class="col-6 col-md-3">
-                        <div class="impact-number">12+</div>
+            </div>
+
+            <!-- LƯU Ý: SỐ LIỆU MINH HỌA -->
+
+            <div class="row g-4 impact-grid">
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="impact-card reveal">
+
+                        <div class="impact-icon">♡</div>
+
+                        <div class="impact-number"
+                             data-count="12">
+                            0
+                        </div>
+
                         <p>Chiến dịch minh họa</p>
+
                     </div>
 
-                    <div class="col-6 col-md-3">
-                        <div class="impact-number">5.280+</div>
-                        <p>Nhà hảo tâm minh họa</p>
-                    </div>
-
-                    <div class="col-6 col-md-3">
-                        <div class="impact-number">1,2 tỷ+</div>
-                        <p>Tiền quyên góp minh họa</p>
-                    </div>
-
-                    <div class="col-6 col-md-3">
-                        <div class="impact-number">8.600+</div>
-                        <p>Lượt hỗ trợ minh họa</p>
-                    </div>
                 </div>
 
-                <a href="#chien-dich" class="btn-charity">
-                    ♥ Cùng tham gia
-                </a>
-            </section>
+                <div class="col-6 col-lg-3">
+
+                    <div class="impact-card reveal">
+
+                        <div class="impact-icon">♧</div>
+
+                        <div class="impact-number"
+                             data-count="5280">
+                            0
+                        </div>
+
+                        <p>Nhà hảo tâm minh họa</p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="impact-card reveal">
+
+                        <div class="impact-icon">₫</div>
+
+                        <div class="impact-number"
+                             data-count="1200">
+                            0
+                        </div>
+
+                        <p>Triệu đồng minh họa</p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="impact-card reveal">
+
+                        <div class="impact-icon">✦</div>
+
+                        <div class="impact-number"
+                             data-count="8600">
+                            0
+                        </div>
+
+                        <p>Lượt hỗ trợ minh họa</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p class="impact-note">
+                * Các số liệu trên là dữ liệu minh họa phục vụ giao diện đồ án.
+            </p>
 
         </div>
+
+    </section>
+
+
+    <!-- =====================================
+         5. HOW IT WORKS
+    ====================================== -->
+
+    <section class="home-process-section">
+
+        <div class="container home-container">
+
+            <div class="section-heading-wrap process-heading reveal">
+
+                <div>
+                    <span class="section-eyebrow">
+                        BẮT ĐẦU TỪ NHỮNG ĐIỀU NHỎ BÉ
+                    </span>
+
+                    <h2 class="home-section-title">
+                        Đồng hành cùng CHARITY
+                    </h2>
+
+                    <p class="home-section-description">
+                        Chỉ với ba bước đơn giản, bạn đã có thể
+                        tìm hiểu và chung tay cùng cộng đồng.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="row g-4 process-grid">
+
+                <div class="col-md-4">
+
+                    <div class="process-card reveal">
+
+                        <div class="process-number">01</div>
+
+                        <div class="process-icon">⌕</div>
+
+                        <h3>Khám phá</h3>
+
+                        <p>
+                            Tìm hiểu các chiến dịch thiện nguyện
+                            và những hoàn cảnh đang cần được hỗ trợ.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="process-card reveal">
+
+                        <div class="process-number">02</div>
+
+                        <div class="process-icon">♡</div>
+
+                        <h3>Kết nối</h3>
+
+                        <p>
+                            Lựa chọn chiến dịch phù hợp và tìm hiểu
+                            thông tin trước khi tham gia.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="process-card reveal">
+
+                        <div class="process-number">03</div>
+
+                        <div class="process-icon">✦</div>
+
+                        <h3>Lan tỏa</h3>
+
+                        <p>
+                            Cùng chia sẻ những giá trị tích cực
+                            và góp phần tạo nên thay đổi tốt đẹp.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         6. ABOUT CHARITY
+    ====================================== -->
+
+    <section class="home-about-section">
+
+        <div class="container home-container">
+
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-6">
+
+                    <div class="about-image-wrap reveal">
+
+                        <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1200&q=85"
+                             alt="Những người cùng chung tay hoạt động cộng đồng"
+                             loading="lazy" />
+
+                        <div class="about-image-label">
+                            <span>♥</span>
+                            SẺ CHIA ĐỂ YÊU THƯƠNG
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="about-content reveal">
+
+                        <span class="section-eyebrow">
+                            VỀ CHÚNG TÔI
+                        </span>
+
+                        <h2>
+                            CHARITY – Nơi
+                            <span>yêu thương được kết nối</span>
+                        </h2>
+
+                        <p>
+                            CHARITY hướng đến việc xây dựng một cầu nối
+                            giữa những tấm lòng nhân ái và những hoàn cảnh
+                            cần được sẻ chia.
+                        </p>
+
+                        <p>
+                            Chúng tôi mong muốn góp phần lan tỏa tinh thần
+                            tương thân tương ái, khuyến khích mọi người
+                            cùng tham gia những hoạt động có ý nghĩa
+                            cho cộng đồng.
+                        </p>
+
+                        <div class="about-highlight">
+
+                            <span class="about-check">✓</span>
+
+                            <div>
+                                <strong>Kết nối cộng đồng</strong>
+                                <p>Gắn kết những trái tim cùng chung mục tiêu.</p>
+                            </div>
+
+                        </div>
+
+                        <div class="about-highlight">
+
+                            <span class="about-check">✓</span>
+
+                            <div>
+                                <strong>Lan tỏa giá trị nhân văn</strong>
+                                <p>Góp phần mang đến hy vọng và sự sẻ chia.</p>
+                            </div>
+
+                        </div>
+
+                        <a href="@Url.Action("GioiThieu", "Home")"
+                           class="home-btn home-btn-primary about-button">
+                            Tìm hiểu thêm về CHARITY →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         7. FINAL CALL TO ACTION
+    ====================================== -->
+
+    <section class="home-cta-section">
+
+        <div class="container home-container">
+
+            <div class="home-cta-box reveal">
+
+                <div class="cta-decoration cta-decoration-one"></div>
+                <div class="cta-decoration cta-decoration-two"></div>
+
+                <div class="cta-content">
+
+                    <span class="cta-eyebrow">
+                        MỘT HÀNH ĐỘNG – NGÀN YÊU THƯƠNG
+                    </span>
+
+                    <h2>
+                        Hãy cùng chúng tôi
+                        tạo nên sự khác biệt!
+                    </h2>
+
+                    <p>
+                        Đừng chờ đợi những điều lớn lao.
+                        Hãy bắt đầu từ một hành động tử tế hôm nay.
+                    </p>
+
+                    <a href="@Url.Action("Index", "Campaign")"
+                       class="home-btn home-btn-white">
+                        Khám phá các chiến dịch
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </div>
+
+
+@section scripts {
+
+    <script src="@Url.Content("~/Scripts/charity-home.js")"></script>
+
+}

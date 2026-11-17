@@ -13,8 +13,11 @@
     int totalTransactions = donations.Count();
     int validCount = donations.Count(d => d.Status == 1);
 }
-
-<div class="container mt-4 mb-5">
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
+<div class="container charity-admin-page mt-4 mb-5">
 
     @if (TempData["Success"] != null)
     {

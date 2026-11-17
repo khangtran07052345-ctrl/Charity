@@ -1,0 +1,263 @@
+﻿
+/* =====================================
+   CHARITY CAMPAIGN LIST
+===================================== */
+
+.charity-campaign-page {
+    --campaign-blue: #0878D1;
+    --campaign-dark: #172B45;
+    --campaign-muted: #68788C;
+    --campaign-border: #E5EDF5;
+    background: #F7FAFD;
+    color: var(--campaign-dark);
+    min-height: 100%;
+}
+
+.campaign-container {
+    width: min(100% - 40px, 1200px);
+    margin: auto;
+}
+
+.campaign-page-hero {
+    padding: 75px 0 60px;
+    background: linear-gradient(120deg, #EAF5FF, #FFFFFF);
+}
+
+    .campaign-page-hero .campaign-container > span,
+    .campaign-section-heading span {
+        color: var(--campaign-blue);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .campaign-page-hero h1 {
+        margin: 18px 0;
+        color: var(--campaign-dark);
+        font-size: clamp(36px, 5vw, 52px);
+        font-weight: 850;
+        line-height: 1.2;
+    }
+
+        .campaign-page-hero h1 strong {
+            color: var(--campaign-blue);
+        }
+
+    .campaign-page-hero p {
+        max-width: 600px;
+        color: var(--campaign-muted);
+        line-height: 1.8;
+    }
+
+.campaign-breadcrumb {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    font-size: 12px;
+}
+
+    .campaign-breadcrumb a {
+        color: var(--campaign-blue);
+        text-decoration: none;
+    }
+
+.campaign-section-heading {
+    margin-bottom: 28px;
+}
+
+    .campaign-section-heading h2 {
+        margin: 10px 0;
+        font-size: 30px;
+        font-weight: 850;
+    }
+
+    .campaign-section-heading p {
+        color: var(--campaign-muted);
+        font-size: 14px;
+    }
+
+.campaign-filter-panel {
+    margin-bottom: 40px;
+    padding: 22px;
+    border: 1px solid var(--campaign-border);
+    border-radius: 16px;
+    background: #FFFFFF;
+    box-shadow: 0 5px 20px rgba(20,50,80,.045);
+}
+
+    .campaign-filter-panel .form-control,
+    .campaign-filter-panel .form-select {
+        min-height: 46px;
+        border-color: #DCE5EE;
+        border-radius: 9px;
+        font-size: 13px;
+    }
+
+        .campaign-filter-panel .form-control:focus,
+        .campaign-filter-panel .form-select:focus {
+            border-color: var(--campaign-blue);
+            box-shadow: 0 0 0 3px rgba(8,120,209,.10);
+        }
+
+    .campaign-filter-panel .btn {
+        min-height: 46px;
+        border-radius: 9px;
+        background: var(--campaign-blue);
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+.campaign-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--campaign-border);
+    border-radius: 17px;
+    background: #FFFFFF;
+    box-shadow: 0 5px 18px rgba(20,50,80,.045);
+    transition: .3s ease;
+}
+
+    .campaign-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 16px 35px rgba(20,50,80,.11);
+    }
+
+.campaign-image {
+    height: 220px;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+
+.campaign-card:hover .campaign-image {
+    transform: scale(1.04);
+}
+
+.campaign-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 22px;
+}
+
+    .campaign-content h4 {
+        min-height: 50px;
+        margin: 15px 0 10px;
+        color: var(--campaign-dark);
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.5;
+    }
+
+.campaign-description {
+    min-height: 63px;
+    color: var(--campaign-muted);
+    font-size: 13px;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.campaign-status {
+    align-self: flex-start;
+    border-radius: 30px;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.campaign-progress-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    color: var(--campaign-muted);
+    font-size: 12px;
+}
+
+    .campaign-progress-heading strong {
+        color: var(--campaign-blue);
+    }
+
+.progress-track {
+    height: 8px;
+    margin: 9px 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #E9EFF5;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0878D1, #36B6E8);
+}
+
+.money-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+    .money-info div {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .money-info strong {
+        color: var(--campaign-dark);
+        overflow-wrap: anywhere;
+    }
+
+    .money-info small {
+        margin-top: 5px;
+        color: #8795A5;
+    }
+
+.campaign-button {
+    margin-top: auto;
+    padding: 12px;
+    border-radius: 9px;
+    background: #EAF5FF;
+    color: var(--campaign-blue);
+    text-align: center;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: .25s ease;
+}
+
+    .campaign-button:hover {
+        background: var(--campaign-blue);
+        color: #FFFFFF;
+    }
+
+@media(max-width:767px) {
+    .campaign-container {
+        width: min(100% - 30px, 1200px);
+    }
+
+    .campaign-page-hero {
+        padding: 55px 0 45px;
+    }
+
+    .campaign-filter-panel {
+        padding: 16px;
+    }
+
+    .campaign-image {
+        height: 200px;
+    }
+
+    .campaign-content {
+        padding: 17px;
+    }
+}

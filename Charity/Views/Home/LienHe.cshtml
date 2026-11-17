@@ -1,91 +1,157 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Liên hệ";
 }
 
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">Liên hệ với CHARITY</h1>
-        <p class="lead">
-            Chúng tôi luôn sẵn sàng tiếp nhận câu hỏi và góp ý của bạn.
-        </p>
-    </div>
+@section styles {
+    <link href="@Url.Content("~/Content/charity-pages.css")" rel="stylesheet" />
+}
 
-    <div class="row g-4">
+<main class="charity-pages">
 
-        <!-- Thông tin liên hệ -->
-        <div class="col-md-5">
-            <div class="p-4 bg-light rounded shadow-sm h-100">
-                <h3 class="mb-4">Thông tin liên hệ</h3>
-
-                <p>
-                    <strong>Đơn vị:</strong> Quản trị hệ thống CHARITY
-                </p>
-
-                <p>
-                    <strong>Email:</strong>
-                    <a href="mailto:admin@charity.com">
-                        admin@charity.com
-                    </a>
-                </p>
-
-                <p>
-                    <strong>Điện thoại:</strong>
-                    <a href="tel:0901234567">
-                        0901234567
-                    </a>
-                </p>
-
-                <p>
-                    <strong>Địa chỉ:</strong>
-                    Vui lòng liên hệ qua email để được hỗ trợ.
-                </p>
+    <section class="inner-hero">
+        <div class="container page-container">
+            <span class="page-eyebrow">KẾT NỐI VỚI CHÚNG TÔI</span>
+            <h1>Chúng tôi luôn<br /><span>lắng nghe bạn.</span></h1>
+            <p>
+                Mọi câu hỏi, ý kiến đóng góp và sự quan tâm của bạn
+                đều rất quan trọng đối với CHARITY.
+            </p>
+            <div class="page-breadcrumb">
+                <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+                <span>/</span>
+                <strong>Liên hệ</strong>
             </div>
         </div>
+    </section>
 
-        <!-- Biểu mẫu liên hệ -->
-        <div class="col-md-7">
-            <div class="p-4 border rounded shadow-sm">
-                <h3 class="mb-4">Gửi lời nhắn</h3>
+    <section class="contact-section">
+        <div class="container page-container">
 
-                <form method="post" action="@Url.Action("LienHe", "Home")">
+            <div class="page-section-heading">
+                <span class="page-eyebrow">CHÚNG TÔI Ở ĐÂY ĐỂ HỖ TRỢ</span>
+                <h2 class="page-heading">Hãy gửi lời nhắn cho CHARITY</h2>
+                <p>Liên hệ với chúng tôi qua những thông tin bên dưới.</p>
+            </div>
 
-                    <div class="mb-3">
-                        <label for="hoTen" class="form-label">Họ và tên</label>
-                        <input type="text"
-                               class="form-control"
-                               id="hoTen"
-                               name="hoTen"
-                               placeholder="Nhập họ và tên"
-                               required />
+            <div class="row g-4">
+
+                <div class="col-lg-5">
+                    <div class="contact-info-card">
+                        <h2>Thông tin liên hệ</h2>
+                        <p>
+                            Hãy kết nối với chúng tôi để tìm hiểu thêm
+                            về hoạt động và các chiến dịch thiện nguyện.
+                        </p>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">✉</div>
+                            <div>
+                                <strong>Email</strong>
+                                <a href="mailto:admin@charity.com">
+                                    admin@charity.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">☎</div>
+                            <div>
+                                <strong>Điện thoại</strong>
+                                <a href="tel:0901234567">0901234567</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">⌖</div>
+                            <div>
+                                <strong>Đơn vị</strong>
+                                <span>Quản trị hệ thống CHARITY</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">◷</div>
+                            <div>
+                                <strong>Hỗ trợ</strong>
+                                <span>Tiếp nhận thông tin qua email và điện thoại.</span>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email"
-                               class="form-control"
-                               id="email"
-                               name="email"
-                               placeholder="Nhập email của bạn"
-                               required />
+                <div class="col-lg-7">
+                    <div class="contact-form-card">
+                        <h2>Gửi lời nhắn</h2>
+                        <p class="text-muted">
+                            Vui lòng điền đầy đủ thông tin bên dưới.
+                        </p>
+
+                        <div id="contactMessage"
+                             class="alert d-none"
+                             role="alert"></div>
+
+                        <form id="contactForm">
+
+                            <div class="mb-3">
+                                <label for="hoTen" class="form-label">
+                                    Họ và tên *
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="hoTen"
+                                       name="hoTen"
+                                       maxlength="100"
+                                       placeholder="Nhập họ và tên"
+                                       required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    Email *
+                                </label>
+                                <input type="email"
+                                       class="form-control"
+                                       id="email"
+                                       name="email"
+                                       maxlength="150"
+                                       placeholder="example@email.com"
+                                       required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="noiDung" class="form-label">
+                                    Nội dung liên hệ *
+                                </label>
+                                <textarea class="form-control"
+                                          id="noiDung"
+                                          name="noiDung"
+                                          maxlength="2000"
+                                          placeholder="Bạn muốn chia sẻ điều gì với chúng tôi?"
+                                          required></textarea>
+                                <div class="text-end text-muted small mt-1">
+                                    <span id="contactCount">0</span>/2000 ký tự
+                                </div>
+                            </div>
+
+                            <button type="submit" class="contact-submit">
+                                Gửi lời nhắn →
+                            </button>
+
+                            <p class="small text-muted mt-3 mb-0">
+                                * Biểu mẫu hiện đang ở chế độ demo,
+                                chưa kết nối dịch vụ gửi email.
+                            </p>
+
+                        </form>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="noiDung" class="form-label">Nội dung</label>
-                        <textarea class="form-control"
-                                  id="noiDung"
-                                  name="noiDung"
-                                  rows="5"
-                                  placeholder="Nhập nội dung cần liên hệ"
-                                  required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Gửi liên hệ
-                    </button>
-
-                </form>
             </div>
         </div>
+    </section>
+</main>
 
-    </div>
-</div>
+@section scripts {
+    <script src="@Url.Content("~/Scripts/charity-pages.js")"></script>
+}

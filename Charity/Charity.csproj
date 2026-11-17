@@ -261,6 +261,10 @@
     <Content Include="Content\CampaignImages\images %281a%29.jpg" />
     <Content Include="Content\CampaignImages\images %282%29.jpg" />
     <Content Include="Content\CampaignImages\VinhHaLong.jpg" />
+    <Content Include="Content\charity-campaign.css" />
+    <Content Include="Content\charity-home.css" />
+    <Content Include="Content\charity-pages.css" />
+    <Content Include="Content\Charity-system.css" />
     <Content Include="Content\Image\1.jpg" />
     <Content Include="Content\Image\2.jpg" />
     <Content Include="Content\Image\3.jpg" />

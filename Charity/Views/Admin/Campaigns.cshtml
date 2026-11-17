@@ -4,7 +4,11 @@
     ViewBag.Title = "Quản lý chiến dịch";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-4 mb-5">
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
+<div class="container charity-admin-page mt-4 mb-5">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
         <h2>Quản lý chiến dịch</h2>
         @Html.ActionLink("+ Thêm chiến dịch", "CreateCampaign", "Admin", null, new { @class = "btn btn-primary" })
@@ -30,7 +34,7 @@
                 @if (!Model.Any())
                 {
                     <tr><td colspan="7" class="text-center text-muted">Không có chiến dịch phù hợp.</td></tr>
-}
+                }
             </tbody>
         </table>
     </div>

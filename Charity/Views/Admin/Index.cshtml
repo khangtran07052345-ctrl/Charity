@@ -40,6 +40,10 @@
         ? 0
         : Convert.ToInt32(ViewBag.ValidDonationCount);
 }
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
 
 <style>
     .admin-dashboard {
@@ -262,12 +266,12 @@
         <h4 class="mb-0">Tiến độ chiến dịch</h4>
 
         @Html.ActionLink(
-            "+ Thêm chiến dịch",
-            "CreateCampaign",
-            "Admin",
-            null,
-            new { @class = "btn btn-primary" }
-        )
+                      "+ Thêm chiến dịch",
+                      "CreateCampaign",
+                      "Admin",
+                      null,
+                      new { @class = "btn btn-primary" }
+                  )
     </div>
 
     <div class="table-responsive mb-4">
@@ -386,12 +390,12 @@
     <!-- ĐĂNG XUẤT -->
     <div class="mt-4">
         @Html.ActionLink(
-            "Đăng xuất",
-            "Logout",
-            "Account",
-            null,
-            new { @class = "btn btn-outline-danger" }
-        )
+                      "Đăng xuất",
+                      "Logout",
+                      "Account",
+                      null,
+                      new { @class = "btn btn-outline-danger" }
+                  )
     </div>
 
 </div>

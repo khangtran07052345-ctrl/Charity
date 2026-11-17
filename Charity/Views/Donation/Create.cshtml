@@ -246,6 +246,8 @@
 
         <div class="d-flex flex-wrap gap-2">
             <button type="submit" id="submitBtn" class="btn btn-primary">♥ Xác nhận</button>
+            <button type="reset" id="undoBtn" class="btn btn-outline-warning">↶ Undo / Hoàn tác</button>
+            @Html.ActionLink("Lịch sử giao dịch", "History", "Donation", null, new { @class = "btn btn-outline-info" })
             @Html.ActionLink("Hủy", "Details", "Campaign", new { id = Model.CampaignId }, new { @class = "btn btn-outline-secondary" })
         </div>
     }
@@ -254,79 +256,88 @@
 @section Scripts {
     <script>
 (function () {
-            var typeInput = document.getElementById('DonationType');
-            var moneyBox = document.getElementById('moneyBox');
-            var kindBox = document.getElementById('kindBox');
-            var tabMoney = document.getElementById('tabMoney');
-            var tabKind = document.getElementById('tabKind');
-            var submitBtn = document.getElementById('submitBtn');
-            var amountInput = document.getElementById('Amount');
-            var bankPanel = document.getElementById('bankPanel');
-            var walletPanel = document.getElementById('walletPanel');
-            var qrImg = document.getElementById('qrImg');
-            var amountText = document.getElementById('amountText');
-            var code = document.getElementById('transferCode').textContent.trim();
+                    var typeInput = document.getElementById('DonationType');
+                    var moneyBox = document.getElementById('moneyBox');
+                    var kindBox = document.getElementById('kindBox');
+                    var tabMoney = document.getElementById('tabMoney');
+                    var tabKind = document.getElementById('tabKind');
+                    var submitBtn = document.getElementById('submitBtn');
+                    var amountInput = document.getElementById('Amount');
+                    var bankPanel = document.getElementById('bankPanel');
+                    var walletPanel = document.getElementById('walletPanel');
+                    var qrImg = document.getElementById('qrImg');
+                    var amountText = document.getElementById('amountText');
+                    var code = document.getElementById('transferCode').textContent.trim();
 
-            function isBank() {
-                var r = document.querySelector('input.pay-method:checked');
-                return !r || r.value.indexOf('Chuyển khoản') === 0;
-            }
-
-            function updatePayment() {
-                var bank = isBank();
-                bankPanel.style.display = bank ? '' : 'none';
-                walletPanel.style.display = bank ? 'none' : '';
-                var amt = parseInt(amountInput.value, 10) || 0;
-                amountText.textContent = amt.toLocaleString('vi-VN');
-                if (bank) {
-                    qrImg.src = 'https://img.vietqr.io/image/' + bankPanel.dataset.bank + '-' + bankPanel.dataset.acc +
-                                '-compact2.png?amount=' + amt +
-                                '&addInfo=' + encodeURIComponent(code) +
-                                '&accountName=' + encodeURIComponent(bankPanel.dataset.name);
-                }
-                if (typeInput.value === 'Money') {
-                    submitBtn.textContent = bank ? '✔ Tôi đã chuyển khoản' : '♥ Xác nhận quyên góp';
-                }
-            }
-
-            function setType(t) {
-                typeInput.value = t;
-                var money = (t === 'Money');
-                moneyBox.disabled = !money;               // fieldset disabled => không gửi & không bắt buộc nhập
-                kindBox.disabled = money;
-                moneyBox.style.display = money ? '' : 'none';
-                kindBox.style.display = money ? 'none' : '';
-                tabMoney.classList.toggle('active', money);
-                tabKind.classList.toggle('active', !money);
-                if (money) { updatePayment(); } else { submitBtn.textContent = '📦 Gửi đăng ký quyên góp hiện vật'; }
-            }
-
-            tabMoney.addEventListener('click', function () { setType('Money'); });
-            tabKind.addEventListener('click', function () { setType('InKind'); });
-
-            document.querySelectorAll('.quick-amount').forEach(function (b) {
-                b.addEventListener('click', function () {
-                    amountInput.value = b.dataset.amount;
-                    updatePayment();
-                });
-            });
-            amountInput.addEventListener('input', updatePayment);
-            document.querySelectorAll('.pay-method').forEach(function (r) {
-                r.addEventListener('change', updatePayment);
-            });
-
-            document.querySelectorAll('.copy-btn').forEach(function (b) {
-                b.addEventListener('click', function () {
-                    var text = document.getElementById(b.dataset.target).textContent.trim();
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(text).then(function () {
-                            var old = b.textContent; b.textContent = 'Đã copy'; setTimeout(function () { b.textContent = old; }, 1200);
-                        });
+                    function isBank() {
+                        var r = document.querySelector('input.pay-method:checked');
+                        return !r || r.value.indexOf('Chuyển khoản') === 0;
                     }
-                });
-            });
 
-            setType(typeInput.value === 'InKind' ? 'InKind' : 'Money');
+                    function updatePayment() {
+                        var bank = isBank();
+                        bankPanel.style.display = bank ? '' : 'none';
+                        walletPanel.style.display = bank ? 'none' : '';
+                        var amt = parseInt(amountInput.value, 10) || 0;
+                        amountText.textContent = amt.toLocaleString('vi-VN');
+                        if (bank) {
+                            qrImg.src = 'https://img.vietqr.io/image/' + bankPanel.dataset.bank + '-' + bankPanel.dataset.acc +
+                                        '-compact2.png?amount=' + amt +
+                                        '&addInfo=' + encodeURIComponent(code) +
+                                        '&accountName=' + encodeURIComponent(bankPanel.dataset.name);
+                        }
+                        if (typeInput.value === 'Money') {
+                            submitBtn.textContent = bank ? '✔ Tôi đã chuyển khoản' : '♥ Xác nhận quyên góp';
+                        }
+                    }
+
+                    function setType(t) {
+                        typeInput.value = t;
+                        var money = (t === 'Money');
+                        moneyBox.disabled = !money;               // fieldset disabled => không gửi & không bắt buộc nhập
+                        kindBox.disabled = money;
+                        moneyBox.style.display = money ? '' : 'none';
+                        kindBox.style.display = money ? 'none' : '';
+                        tabMoney.classList.toggle('active', money);
+                        tabKind.classList.toggle('active', !money);
+                        if (money) { updatePayment(); } else { submitBtn.textContent = '📦 Gửi đăng ký quyên góp hiện vật'; }
+                    }
+
+                    tabMoney.addEventListener('click', function () { setType('Money'); });
+                    tabKind.addEventListener('click', function () { setType('InKind'); });
+
+                    // Undo: khôi phục các trường về giá trị ban đầu do server render.
+                    var donateForm = document.getElementById('donateForm');
+                    donateForm.addEventListener('reset', function () {
+                        window.setTimeout(function () {
+                            setType(typeInput.value === 'InKind' ? 'InKind' : 'Money');
+                            updatePayment();
+                        }, 0);
+                    });
+
+                    document.querySelectorAll('.quick-amount').forEach(function (b) {
+                        b.addEventListener('click', function () {
+                            amountInput.value = b.dataset.amount;
+                            updatePayment();
+                        });
+                    });
+                    amountInput.addEventListener('input', updatePayment);
+                    document.querySelectorAll('.pay-method').forEach(function (r) {
+                        r.addEventListener('change', updatePayment);
+                    });
+
+                    document.querySelectorAll('.copy-btn').forEach(function (b) {
+                        b.addEventListener('click', function () {
+                            var text = document.getElementById(b.dataset.target).textContent.trim();
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(text).then(function () {
+                                    var old = b.textContent; b.textContent = 'Đã copy'; setTimeout(function () { b.textContent = old; }, 1200);
+                                });
+                            }
+                        });
+                    });
+
+                    setType(typeInput.value === 'InKind' ? 'InKind' : 'Money');
 })();
     </script>
 }

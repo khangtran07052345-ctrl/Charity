@@ -3,7 +3,11 @@
     ViewBag.Title = "Xóa chiến dịch";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-5 mb-5" style="max-width:700px">
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
+<div class="container charity-admin-page mt-5 mb-5" style="max-width:700px">
     <div class="card border-danger shadow-sm">
         <div class="card-body">
             <h2 class="text-danger">Xác nhận xóa chiến dịch</h2>

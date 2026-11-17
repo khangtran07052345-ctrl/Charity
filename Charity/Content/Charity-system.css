@@ -1,0 +1,617 @@
+﻿
+/* =====================================
+   CHARITY CAMPAIGN DETAIL
+===================================== */
+
+.charity-detail-page {
+    max-width: 1150px;
+    margin: 55px auto;
+    padding: 0 20px 55px;
+}
+
+    .charity-detail-page .campaign-detail-image {
+        height: 390px;
+        border-radius: 20px;
+        object-fit: cover;
+        box-shadow: 0 15px 35px rgba(20,50,80,.12);
+    }
+
+    .charity-detail-page .campaign-detail-info {
+        padding: 15px 20px;
+    }
+
+        .charity-detail-page .campaign-detail-info h2 {
+            margin: 15px 0;
+            color: #172B45;
+            font-size: clamp(27px, 3vw, 36px);
+            font-weight: 850;
+            line-height: 1.35;
+        }
+
+    .charity-detail-page .campaign-date {
+        color: #68788C;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .charity-detail-page .progress {
+        height: 15px !important;
+        border-radius: 20px;
+        background: #E8EEF4;
+    }
+
+    .charity-detail-page .progress-bar {
+        border-radius: 20px;
+        background: linear-gradient(90deg,#0878D1,#36B6E8) !important;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .charity-detail-page .campaign-detail-info > p {
+        color: #68788C;
+        font-size: 14px;
+        line-height: 2;
+    }
+
+        .charity-detail-page .campaign-detail-info > p strong {
+            color: #0878D1;
+        }
+
+    .charity-detail-page .campaign-detail-info .btn-primary {
+        min-height: 52px;
+        border: 0;
+        border-radius: 11px;
+        background: #0878D1;
+        font-size: 14px;
+        font-weight: 800;
+        transition: .25s ease;
+    }
+
+        .charity-detail-page .campaign-detail-info .btn-primary:hover {
+            background: #075A9E;
+            transform: translateY(-3px);
+        }
+
+    .charity-detail-page .campaign-detail-description {
+        margin-top: 35px;
+        padding: 30px;
+        border: 1px solid #E5EDF5;
+        border-radius: 17px;
+        background: #F7FAFD;
+    }
+
+        .charity-detail-page .campaign-detail-description h4 {
+            color: #172B45;
+            font-size: 21px;
+            font-weight: 850;
+        }
+
+        .charity-detail-page .campaign-detail-description p {
+            color: #68788C;
+            font-size: 14px;
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+    .charity-detail-page .campaign-detail-back {
+        display: inline-block;
+        margin-top: 25px;
+        color: #0878D1;
+        font-size: 13px;
+        font-weight: 750;
+        text-decoration: none;
+    }
+
+        .charity-detail-page .campaign-detail-back:hover {
+            color: #075A9E;
+            transform: translateX(-3px);
+        }
+
+@media(max-width:767px) {
+    .charity-detail-page {
+        margin: 25px auto;
+        padding: 0 15px 35px;
+    }
+
+        .charity-detail-page .campaign-detail-image {
+            height: 260px;
+        }
+
+        .charity-detail-page .campaign-detail-info {
+            padding: 5px 0;
+        }
+
+        .charity-detail-page .campaign-detail-description {
+            padding: 20px;
+        }
+}
+
+/* =====================================
+   CHARITY AUTHENTICATION
+===================================== */
+
+.charity-auth-body {
+    background: #F4F8FD;
+}
+
+.charity-auth-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle at 10% 20%,rgba(8,120,209,.10),transparent 35%), linear-gradient(135deg,#F0F7FF,#FFFFFF);
+}
+
+.charity-auth-page {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    align-items: center;
+    gap: 65px;
+    width: min(100% - 40px,1100px);
+    min-height: 680px;
+    margin: 35px auto;
+}
+
+.charity-auth-intro .eyebrow {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #0878D1;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.charity-auth-intro h1 {
+    color: #172B45;
+    font-size: clamp(36px,5vw,53px);
+    font-weight: 850;
+    line-height: 1.2;
+}
+
+    .charity-auth-intro h1 span {
+        color: #0878D1;
+    }
+
+.charity-auth-intro p {
+    max-width: 510px;
+    margin-top: 20px;
+    color: #68788C;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.charity-auth-form {
+    padding: 40px;
+    border: 1px solid #E5EDF5;
+    border-radius: 22px;
+    background: #FFFFFF;
+    box-shadow: 0 15px 45px rgba(20,50,80,.09);
+}
+
+    .charity-auth-form h2 {
+        margin-bottom: 9px;
+        color: #172B45;
+        font-size: 29px;
+        font-weight: 850;
+    }
+
+.charity-auth-subtitle {
+    margin-bottom: 25px;
+    color: #8795A5;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.charity-auth-form label {
+    display: block;
+    margin: 17px 0 8px;
+    color: #172B45;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.charity-auth-form .form-control {
+    min-height: 47px;
+    border: 1px solid #DCE5EE;
+    border-radius: 9px;
+    font-size: 13px;
+}
+
+    .charity-auth-form .form-control:focus {
+        border-color: #0878D1;
+        box-shadow: 0 0 0 3px rgba(8,120,209,.10);
+    }
+
+.charity-auth-form .btn-charity {
+    width: 100%;
+    min-height: 49px;
+    margin-top: 25px;
+    border: 0;
+    border-radius: 10px;
+    background: #0878D1;
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    transition: .25s ease;
+}
+
+    .charity-auth-form .btn-charity:hover {
+        background: #075A9E;
+        transform: translateY(-2px);
+    }
+
+.charity-auth-switch {
+    margin: 24px 0 0;
+    color: #68788C;
+    font-size: 13px;
+    text-align: center;
+}
+
+    .charity-auth-switch a {
+        color: #0878D1;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+@media(max-width:850px) {
+    .charity-auth-page {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 550px;
+        padding: 30px 0;
+    }
+
+    .charity-auth-intro {
+        text-align: center;
+    }
+
+        .charity-auth-intro p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+}
+
+@media(max-width:500px) {
+    .charity-auth-page {
+        width: calc(100% - 25px);
+    }
+
+    .charity-auth-form {
+        padding: 25px 20px;
+    }
+}
+
+/* =====================================
+   DONATION FORM
+===================================== */
+
+.charity-donation-page {
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .charity-donation-page > h2 {
+        margin-bottom: 25px;
+        color: #172B45;
+        font-size: 32px;
+        font-weight: 850;
+    }
+
+    .charity-donation-page .alert-info {
+        padding: 22px;
+        border: 1px solid #D8EAF8;
+        border-radius: 14px;
+        background: #EDF7FF;
+        color: #17476C;
+    }
+
+    .charity-donation-page #donateForm {
+        padding: 30px;
+        border: 1px solid #E5EDF5;
+        border-radius: 18px;
+        background: #FFFFFF;
+        box-shadow: 0 10px 30px rgba(20,50,80,.06);
+    }
+
+    .charity-donation-page .form-label {
+        color: #172B45;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .charity-donation-page .form-control,
+    .charity-donation-page .form-select {
+        min-height: 45px;
+        border-color: #DCE5EE;
+        border-radius: 9px;
+        font-size: 13px;
+    }
+
+        .charity-donation-page .form-control:focus,
+        .charity-donation-page .form-select:focus {
+            border-color: #0878D1;
+            box-shadow: 0 0 0 3px rgba(8,120,209,.10);
+        }
+
+    .charity-donation-page .btn-outline-primary {
+        border-radius: 9px;
+    }
+
+    .charity-donation-page .quick-amount {
+        padding: 9px 14px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .charity-donation-page #bankPanel,
+    .charity-donation-page #walletPanel {
+        border-color: #DCE8F3 !important;
+        border-radius: 13px;
+        background: #F7FAFD !important;
+    }
+
+    .charity-donation-page #qrImg {
+        padding: 8px;
+    }
+
+    .charity-donation-page button[type="submit"] {
+        min-height: 49px;
+        border-radius: 10px;
+        font-weight: 800;
+    }
+
+@media(max-width:575px) {
+    .charity-donation-page #donateForm {
+        padding: 20px 15px;
+    }
+}
+
+/* =====================================
+   DONATION HISTORY
+===================================== */
+
+.charity-history-page > h2 {
+    margin-bottom: 30px;
+    color: #172B45;
+    font-size: 31px;
+    font-weight: 850;
+}
+
+.charity-history-page .card {
+    height: 100%;
+    border: 1px solid #E5EDF5 !important;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(20,50,80,.05) !important;
+}
+
+    .charity-history-page .card h3 {
+        font-size: 27px;
+        font-weight: 850;
+    }
+
+.charity-history-page .table-responsive {
+    overflow-x: auto;
+    border: 1px solid #E5EDF5;
+    border-radius: 14px;
+    background: #FFFFFF;
+}
+
+.charity-history-page table {
+    margin-bottom: 0;
+    font-size: 12px;
+}
+
+.charity-history-page thead th {
+    padding: 16px 13px;
+    background: #EDF5FC;
+    color: #172B45;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.charity-history-page tbody td {
+    padding: 14px 13px;
+    color: #53657A;
+    vertical-align: middle;
+}
+
+.charity-history-page tbody tr:hover {
+    background: #F5FAFF;
+}
+
+/* =====================================
+   ADMIN DASHBOARD
+===================================== */
+
+.admin-dashboard,
+.charity-admin-page {
+    color: #172B45;
+}
+
+    .admin-dashboard h2,
+    .charity-admin-page h2 {
+        color: #172B45;
+        font-weight: 850;
+    }
+
+    .admin-dashboard .stat-card,
+    .admin-dashboard .section-card,
+    .charity-admin-page .card {
+        border: 1px solid #E5EDF5;
+        border-radius: 15px;
+        background: #FFFFFF;
+        box-shadow: 0 5px 18px rgba(20,50,80,.045);
+        transition: .25s ease;
+    }
+
+        .admin-dashboard .stat-card:hover,
+        .admin-dashboard .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(20,50,80,.08);
+        }
+
+    .admin-dashboard .stat-number {
+        color: #0878D1;
+        font-size: 32px;
+        font-weight: 850;
+    }
+
+    .admin-dashboard .stat-label {
+        color: #68788C;
+        font-size: 13px;
+    }
+
+    .admin-dashboard .progress,
+    .charity-admin-page .progress {
+        height: 11px;
+        overflow: hidden;
+        border-radius: 20px;
+        background: #E8EEF4;
+    }
+
+    .admin-dashboard .progress-bar,
+    .charity-admin-page .progress-bar {
+        border-radius: 20px;
+        background: linear-gradient(90deg,#0878D1,#36B6E8);
+    }
+
+    .charity-admin-page .form-control,
+    .charity-admin-page .form-select {
+        min-height: 43px;
+        border-color: #DCE5EE;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .charity-admin-page textarea.form-control {
+        min-height: 130px;
+    }
+
+    .charity-admin-page .form-control:focus,
+    .charity-admin-page .form-select:focus {
+        border-color: #0878D1;
+        box-shadow: 0 0 0 3px rgba(8,120,209,.10);
+    }
+
+    .charity-admin-page .btn {
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .charity-admin-page .table-responsive {
+        overflow-x: auto;
+        border: 1px solid #E5EDF5;
+        border-radius: 13px;
+        background: #FFFFFF;
+    }
+
+    .charity-admin-page .table {
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+        .charity-admin-page .table thead th {
+            padding: 15px 12px;
+            background: #EDF5FC;
+            color: #172B45;
+            white-space: nowrap;
+        }
+
+        .charity-admin-page .table tbody td {
+            padding: 13px 12px;
+            vertical-align: middle;
+        }
+
+        .charity-admin-page .table tbody tr:hover {
+            background: #F4F9FE;
+        }
+
+    .charity-admin-page .form-label {
+        color: #172B45;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .charity-admin-page .card-body {
+        padding: 25px;
+    }
+
+@media(max-width:767px) {
+    .charity-admin-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .admin-dashboard .stat-number {
+        font-size: 25px;
+    }
+
+    .charity-admin-page .card-body {
+        padding: 17px;
+    }
+}
+
+/* =====================================
+   CHARITY GLOBAL RESPONSIVE
+===================================== */
+
+@media(max-width:991px) {
+
+    .charity-detail-page {
+        margin-top: 35px;
+    }
+
+    .charity-auth-page {
+        gap: 30px;
+    }
+
+    .campaign-card {
+        margin-bottom: 5px;
+    }
+}
+
+@media(max-width:767px) {
+
+    .charity-detail-page,
+    .charity-history-page {
+        width: 100%;
+    }
+
+        .charity-detail-page .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .charity-detail-page .campaign-detail-description {
+            margin-top: 25px;
+        }
+
+    .charity-donation-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .charity-history-page .table {
+        min-width: 650px;
+    }
+
+    .charity-auth-page {
+        min-height: auto;
+    }
+}
+
+@media(max-width:480px) {
+
+    .charity-detail-page .campaign-detail-info h2 {
+        font-size: 25px;
+    }
+
+    .charity-donation-page > h2 {
+        font-size: 26px;
+    }
+
+    .charity-history-page > h2 {
+        font-size: 25px;
+    }
+}
