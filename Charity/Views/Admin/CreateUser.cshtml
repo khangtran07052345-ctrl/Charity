@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Thêm người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Thêm người dùng</h2>
+        <p class="text-muted">
+            Tạo tài khoản mới cho hệ thống CHARITY
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+
+            @using (Html.BeginForm("CreateUser", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Họ và tên</label>
+                    <input type="text"
+                           name="FullName"
+                           class="form-control"
+                           placeholder="Nhập họ và tên"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email"
+                           name="Email"
+                           class="form-control"
+                           placeholder="example@gmail.com"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Mật khẩu</label>
+                    <input type="password"
+                           name="Password"
+                           class="form-control"
+                           placeholder="Nhập mật khẩu"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Số điện thoại</label>
+                    <input type="text"
+                           name="PhoneNumber"
+                           class="form-control"
+                           placeholder="Nhập số điện thoại" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Vai trò</label>
+                    <select name="Role" class="form-select" required>
+                        <option value="User" selected>Người dùng (User)</option>
+                        <option value="Admin">Quản trị viên (Admin)</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        Thêm tài khoản
+                    </button>
+
+                    <a href="@Url.Action("Users", "Admin")"
+                       class="btn btn-outline-secondary">
+                        Hủy
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

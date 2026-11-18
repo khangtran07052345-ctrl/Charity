@@ -1,31 +1,21 @@
-﻿body {
-}
-
-/* =========================================================
-   CHARITY HOMEPAGE
-   Modern Charity Website
-   Version 1.0
-========================================================= */
-
-/* =========================================================
-   1. GLOBAL
-========================================================= */
+﻿
+/* =====================================================
+   CHARITY HOMEPAGE - MAIN STYLES
+===================================================== */
 
 .charity-home {
-    --home-primary: #0878D1;
-    --home-primary-dark: #075A9E;
-    --home-primary-light: #EAF5FF;
-    --home-green: #16A66A;
-    --home-orange: #F4A340;
-    --home-text: #172B45;
-    --home-muted: #68788C;
-    --home-bg: #F7FAFD;
-    --home-white: #FFFFFF;
-    --home-border: #E7EDF4;
+    --primary: #0878D1;
+    --primary-dark: #075A9E;
+    --primary-light: #EAF5FF;
+    --green: #16A66A;
+    --orange: #F4A340;
+    --text: #172B45;
+    --muted: #68788C;
+    --border: #E7EDF4;
     width: 100%;
     overflow: hidden;
-    color: var(--home-text);
-    background: #FFFFFF;
+    color: var(--text);
+    background: #fff;
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
@@ -41,20 +31,22 @@
 }
 
 .charity-home a {
-    transition: all .25s ease;
     text-decoration: none;
+    transition: all .25s ease;
 }
 
 .charity-home img {
     max-width: 100%;
 }
 
-/* Section heading */
+/* =====================================================
+   SECTION HEADING
+===================================================== */
 
 .section-eyebrow {
     display: inline-block;
     margin-bottom: 13px;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 2px;
@@ -62,7 +54,7 @@
 
 .home-section-title {
     margin: 0;
-    color: var(--home-text);
+    color: var(--text);
     font-size: clamp(27px, 3vw, 36px);
     font-weight: 800;
     line-height: 1.3;
@@ -70,8 +62,8 @@
 
 .home-section-description {
     max-width: 620px;
-    margin: 12px 0 0;
-    color: var(--home-muted);
+    margin-top: 12px;
+    color: var(--muted);
     font-size: 15px;
     line-height: 1.8;
 }
@@ -87,24 +79,66 @@
 .section-view-all {
     flex-shrink: 0;
     padding-bottom: 5px;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 14px;
     font-weight: 750;
 }
 
     .section-view-all:hover {
-        color: var(--home-primary-dark);
+        color: var(--primary-dark);
         transform: translateX(4px);
     }
 
-/* =========================================================
-   2. HERO BANNER
-========================================================= */
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 51px;
+    padding: 13px 22px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 750;
+    transition: all .25s ease;
+}
+
+.home-btn-primary {
+    background: var(--primary);
+    color: #fff !important;
+    box-shadow: 0 7px 18px rgba(8,120,209,.18);
+}
+
+    .home-btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 23px rgba(8,120,209,.25);
+    }
+
+.home-btn-outline {
+    border-color: #D9E4EF;
+    background: #fff;
+    color: var(--text) !important;
+}
+
+    .home-btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary) !important;
+        transform: translateY(-3px);
+    }
+
+/* =====================================================
+   1. HERO BANNER
+===================================================== */
 
 .home-hero {
     position: relative;
     padding: 80px 0 85px;
-    background: radial-gradient( circle at 90% 10%, rgba(8, 120, 209, .09), transparent 30% ), linear-gradient(120deg, #F2F8FF, #FFFFFF 65%);
+    background: radial-gradient(circle at 90% 10%, rgba(8,120,209,.09), transparent 30%), linear-gradient(120deg, #F2F8FF, #FFFFFF 65%);
 }
 
     .home-hero::before {
@@ -113,7 +147,7 @@
         left: -100px;
         width: 280px;
         height: 280px;
-        border: 1px solid rgba(8, 120, 209, .08);
+        border: 1px solid rgba(8,120,209,.08);
         border-radius: 50%;
         content: "";
     }
@@ -131,8 +165,8 @@
     padding: 9px 15px;
     border: 1px solid #D7EAFB;
     border-radius: 30px;
-    background: #FFFFFF;
-    color: var(--home-primary);
+    background: #fff;
+    color: var(--primary);
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 1.2px;
@@ -142,13 +176,13 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--home-green);
-    box-shadow: 0 0 0 4px rgba(22, 166, 106, .12);
+    background: var(--green);
+    box-shadow: 0 0 0 4px rgba(22,166,106,.12);
 }
 
 .hero-content h1 {
     margin: 25px 0 20px;
-    color: var(--home-text);
+    color: var(--text);
     font-size: clamp(38px, 4.5vw, 57px);
     font-weight: 850;
     line-height: 1.18;
@@ -157,13 +191,13 @@
 
     .hero-content h1 span {
         display: block;
-        color: var(--home-primary);
+        color: var(--primary);
     }
 
 .hero-description {
     max-width: 530px;
     margin-bottom: 27px;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 16px;
     line-height: 1.9;
 }
@@ -173,49 +207,6 @@
     flex-wrap: wrap;
     gap: 12px;
 }
-
-.home-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 13px;
-    min-height: 51px;
-    padding: 13px 22px;
-    border: 1px solid transparent;
-    border-radius: 11px;
-    font-size: 13px;
-    font-weight: 750;
-    transition: all .25s ease;
-}
-
-.home-btn-primary {
-    background: var(--home-primary);
-    color: #FFFFFF !important;
-    box-shadow: 0 7px 18px rgba(8, 120, 209, .18);
-}
-
-    .home-btn-primary:hover {
-        background: var(--home-primary-dark);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 23px rgba(8, 120, 209, .25);
-    }
-
-    .home-btn-primary span,
-    .home-btn-white span {
-        font-size: 18px;
-    }
-
-.home-btn-outline {
-    border-color: #D9E4EF;
-    background: #FFFFFF;
-    color: var(--home-text) !important;
-}
-
-    .home-btn-outline:hover {
-        border-color: var(--home-primary);
-        color: var(--home-primary) !important;
-        transform: translateY(-3px);
-    }
 
 .hero-trust {
     display: flex;
@@ -232,7 +223,7 @@
     height: 42px;
     border-radius: 12px;
     background: #E6F4FF;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 21px;
 }
 
@@ -242,17 +233,17 @@
 }
 
 .hero-trust strong {
-    color: var(--home-text);
+    color: var(--text);
     font-size: 13px;
 }
 
 .hero-trust div:last-child span {
     margin-top: 3px;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 12px;
 }
 
-/* Hero image */
+/* HERO IMAGE */
 
 .hero-visual {
     position: relative;
@@ -266,7 +257,7 @@
     overflow: hidden;
     border-radius: 26px;
     background: #DCEAF6;
-    box-shadow: 0 22px 55px rgba(24, 64, 100, .16);
+    box-shadow: 0 22px 55px rgba(24,64,100,.16);
 }
 
     .hero-image-main img {
@@ -304,8 +295,7 @@
     border: 1px solid rgba(255,255,255,.8);
     border-radius: 15px;
     background: rgba(255,255,255,.96);
-    box-shadow: 0 12px 35px rgba(20, 50, 80, .12);
-    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 35px rgba(20,50,80,.12);
 }
 
 .floating-card-icon {
@@ -316,7 +306,7 @@
     height: 40px;
     border-radius: 12px;
     background: #E9F5FF;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 20px;
 }
 
@@ -326,13 +316,12 @@
 }
 
 .hero-floating-card strong {
-    color: var(--home-text);
     font-size: 12px;
 }
 
 .hero-floating-card span {
     margin-top: 4px;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 11px;
 }
 
@@ -346,17 +335,17 @@
     letter-spacing: 2px;
 }
 
-/* =========================================================
-   3. TRUST SECTION
-========================================================= */
+/* =====================================================
+   2. TRUST SECTION
+===================================================== */
 
 .home-trust-section {
     position: relative;
-    z-index: 4;
+    z-index: 2;
     padding: 35px 0;
     border-top: 1px solid #EEF3F8;
     border-bottom: 1px solid #EEF3F8;
-    background: #FFFFFF;
+    background: #fff;
 }
 
 .trust-item {
@@ -396,21 +385,20 @@
 
 .trust-item h3 {
     margin: 2px 0 6px;
-    color: var(--home-text);
     font-size: 16px;
     font-weight: 800;
 }
 
 .trust-item p {
     margin: 0;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 12px;
     line-height: 1.7;
 }
 
-/* =========================================================
-   4. FEATURED CAMPAIGNS
-========================================================= */
+/* =====================================================
+   3. CAMPAIGNS
+===================================================== */
 
 .home-campaign-section {
     padding: 90px 0;
@@ -420,16 +408,16 @@
 .home-campaign-card {
     height: 100%;
     overflow: hidden;
-    border: 1px solid var(--home-border);
+    border: 1px solid var(--border);
     border-radius: 17px;
-    background: #FFFFFF;
-    box-shadow: 0 5px 18px rgba(20, 50, 80, .045);
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(20,50,80,.045);
     transition: transform .3s ease, box-shadow .3s ease;
 }
 
     .home-campaign-card:hover {
         transform: translateY(-7px);
-        box-shadow: 0 16px 35px rgba(20, 50, 80, .11);
+        box-shadow: 0 16px 35px rgba(20,50,80,.11);
     }
 
 .campaign-image-wrap {
@@ -485,8 +473,8 @@
 .home-campaign-content {
     display: flex;
     flex-direction: column;
-    padding: 19px;
     height: calc(100% - 195px);
+    padding: 19px;
 }
 
     .home-campaign-content h3 {
@@ -494,7 +482,7 @@
         min-height: 48px;
         margin: 0 0 9px;
         overflow: hidden;
-        color: var(--home-text);
+        color: var(--text);
         font-size: 16px;
         font-weight: 800;
         line-height: 1.5;
@@ -507,7 +495,7 @@
     min-height: 60px;
     margin: 0 0 14px;
     overflow: hidden;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 12px;
     line-height: 1.7;
     -webkit-box-orient: vertical;
@@ -518,14 +506,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
     margin-bottom: 8px;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 11px;
 }
 
     .campaign-progress-heading strong {
-        color: var(--home-primary);
+        color: var(--primary);
         font-size: 13px;
     }
 
@@ -541,15 +528,13 @@
     height: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, #0878D1, #36B6E8);
-    transition: width 1s ease;
 }
 
 .campaign-money {
     display: flex;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin: 16px 0;
 }
 
     .campaign-money div {
@@ -559,7 +544,7 @@
     }
 
     .campaign-money strong {
-        color: var(--home-text);
+        color: var(--text);
         font-size: 12px;
         overflow-wrap: anywhere;
     }
@@ -585,28 +570,28 @@
     border: 1px solid #D7E9F8;
     border-radius: 9px;
     background: #F1F8FF;
-    color: var(--home-primary) !important;
+    color: var(--primary) !important;
     font-size: 12px;
     font-weight: 800;
 }
 
     .campaign-detail-btn:hover {
-        border-color: var(--home-primary);
-        background: var(--home-primary);
-        color: #FFFFFF !important;
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #fff !important;
     }
 
 .home-empty-state {
     padding: 60px 20px;
     border: 1px dashed #C8D9E8;
     border-radius: 18px;
-    background: #FFFFFF;
+    background: #fff;
     text-align: center;
 }
 
 .empty-icon {
     margin-bottom: 15px;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 45px;
 }
 
@@ -617,12 +602,12 @@
 
 .home-empty-state p {
     margin-bottom: 22px;
-    color: var(--home-muted);
+    color: var(--muted);
 }
 
-/* =========================================================
-   5. IMPACT STATISTICS
-========================================================= */
+/* =====================================================
+   4. IMPACT STATISTICS
+===================================================== */
 
 .home-impact-section {
     position: relative;
@@ -665,7 +650,7 @@
 .impact-heading h2 {
     max-width: 700px;
     margin: 0 auto;
-    color: #FFFFFF;
+    color: #fff;
     font-size: clamp(29px, 3vw, 38px);
     font-weight: 850;
     line-height: 1.35;
@@ -710,10 +695,9 @@
 }
 
 .impact-number {
-    color: #FFFFFF;
+    color: #fff;
     font-size: clamp(25px, 3vw, 35px);
     font-weight: 850;
-    line-height: 1.3;
 }
 
 .impact-card p {
@@ -725,23 +709,19 @@
 .impact-note {
     position: relative;
     z-index: 1;
-    margin: 23px 0 0;
+    margin-top: 23px;
     color: #C4DFF2;
     font-size: 11px;
     text-align: center;
 }
 
-/* =========================================================
-   6. HOW IT WORKS
-========================================================= */
+/* =====================================================
+   5. PROCESS
+===================================================== */
 
 .home-process-section {
     padding: 90px 0;
-    background: #FFFFFF;
-}
-
-.process-heading {
-    margin-bottom: 42px;
+    background: #fff;
 }
 
 .process-card {
@@ -749,9 +729,9 @@
     height: 100%;
     padding: 32px 25px;
     overflow: hidden;
-    border: 1px solid var(--home-border);
+    border: 1px solid var(--border);
     border-radius: 17px;
-    background: #FFFFFF;
+    background: #fff;
     box-shadow: 0 5px 18px rgba(20,50,80,.035);
     transition: all .3s ease;
 }
@@ -782,32 +762,31 @@
     margin-bottom: 22px;
     border-radius: 16px;
     background: #EAF5FF;
-    color: var(--home-primary);
+    color: var(--primary);
     font-size: 29px;
 }
 
 .process-card:nth-child(2) .process-icon {
     background: #E9F8F0;
-    color: var(--home-green);
+    color: var(--green);
 }
 
 .process-card h3 {
     margin-bottom: 11px;
-    color: var(--home-text);
     font-size: 19px;
     font-weight: 800;
 }
 
 .process-card p {
     margin: 0;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 13px;
     line-height: 1.8;
 }
 
-/* =========================================================
-   7. ABOUT CHARITY
-========================================================= */
+/* =====================================================
+   6. ABOUT CHARITY
+===================================================== */
 
 .home-about-section {
     padding: 85px 0;
@@ -837,33 +816,33 @@
     gap: 10px;
     padding: 15px 20px;
     border-radius: 13px;
-    background: #FFFFFF;
-    color: var(--home-text);
+    background: #fff;
+    color: var(--text);
     font-size: 11px;
     font-weight: 800;
     box-shadow: 0 8px 24px rgba(20,50,80,.12);
 }
 
     .about-image-label span {
-        color: var(--home-primary);
+        color: var(--primary);
         font-size: 20px;
     }
 
 .about-content h2 {
     margin: 0 0 20px;
-    color: var(--home-text);
+    color: var(--text);
     font-size: clamp(29px, 3vw, 39px);
     font-weight: 850;
     line-height: 1.3;
 }
 
     .about-content h2 span {
-        color: var(--home-primary);
+        color: var(--primary);
     }
 
 .about-content > p {
     margin-bottom: 13px;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 14px;
     line-height: 1.9;
 }
@@ -884,20 +863,19 @@
     height: 27px;
     border-radius: 50%;
     background: #E5F7EE;
-    color: var(--home-green);
+    color: var(--green);
     font-size: 14px;
     font-weight: 800;
 }
 
 .about-highlight strong {
     display: block;
-    color: var(--home-text);
     font-size: 13px;
 }
 
 .about-highlight p {
     margin: 4px 0 0;
-    color: var(--home-muted);
+    color: var(--muted);
     font-size: 12px;
 }
 
@@ -905,13 +883,13 @@
     margin-top: 25px;
 }
 
-/* =========================================================
-   8. CALL TO ACTION
-========================================================= */
+/* =====================================================
+   7. CALL TO ACTION
+===================================================== */
 
 .home-cta-section {
     padding: 85px 0 95px;
-    background: #FFFFFF;
+    background: #fff;
 }
 
 .home-cta-box {
@@ -960,7 +938,7 @@
 
 .cta-content h2 {
     margin: 18px 0 14px;
-    color: #FFFFFF;
+    color: #fff;
     font-size: clamp(28px, 4vw, 43px);
     font-weight: 850;
     line-height: 1.3;
@@ -975,34 +953,33 @@
 }
 
 .home-btn-white {
-    background: #FFFFFF;
-    color: var(--home-primary-dark) !important;
+    background: #fff;
+    color: var(--primary-dark) !important;
 }
 
     .home-btn-white:hover {
         background: #E9F5FF;
         transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,.12);
     }
 
-/* =========================================================
-   9. REVEAL ANIMATION
-========================================================= */
+/* =====================================================
+   8. IMPORTANT FIX - NEVER HIDE MAIN CONTENT
+===================================================== */
+
+/*
+   Không dùng opacity: 0 cho nội dung trang chủ.
+   Nội dung phải hiển thị kể cả khi JavaScript bị lỗi.
+*/
 
 .charity-home .reveal {
-    opacity: 0;
-    transform: translateY(25px);
-    transition: opacity .7s ease, transform .7s ease;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
 }
 
-    .charity-home .reveal.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-/* =========================================================
-   10. RESPONSIVE TABLET
-========================================================= */
+/* =====================================================
+   9. RESPONSIVE TABLET
+===================================================== */
 
 @media (max-width: 991.98px) {
 
@@ -1012,6 +989,7 @@
 
     .hero-content {
         padding-right: 0;
+        margin-bottom: 35px;
     }
 
     .hero-visual {
@@ -1042,9 +1020,9 @@
     }
 }
 
-/* =========================================================
-   11. RESPONSIVE MOBILE
-========================================================= */
+/* =====================================================
+   10. RESPONSIVE MOBILE
+===================================================== */
 
 @media (max-width: 767.98px) {
 
@@ -1090,7 +1068,7 @@
     }
 
     .trust-item {
-        padding: 8px 0;
+        padding: 12px 0;
     }
 
     .section-heading-wrap {
@@ -1148,17 +1126,11 @@
     }
 }
 
-/* =========================================================
-   12. ACCESSIBILITY
-========================================================= */
+/* =====================================================
+   11. ACCESSIBILITY
+===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-
-    .charity-home .reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
 
     .charity-home *,
     .charity-home *::before,

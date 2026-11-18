@@ -1,38 +1,58 @@
-﻿@model IEnumerable<Charity.Models.Donation>
+﻿
+@model PagedList.IPagedList<Charity.Models.Donation>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Lịch sử quyên góp";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    decimal totalAmount = ViewBag.TotalAmount == null
+        ? 0m
+        : Convert.ToDecimal(ViewBag.TotalAmount);
+
+    int totalDonations = ViewBag.TotalDonations == null
+        ? 0
+        : Convert.ToInt32(ViewBag.TotalDonations);
 }
 
 <div class="container mt-4 mb-5">
 
     <h2 class="mb-4">Lịch sử quyên góp</h2>
+
+    <!-- THỐNG KÊ -->
     <div class="row mb-4">
 
         <div class="col-md-6 mb-3">
             <div class="card card-body shadow-sm">
-                <h6 class="text-muted">Tổng tiền quyên góp hợp lệ</h6>
+                <h6 class="text-muted">
+                    Tổng tiền quyên góp hợp lệ
+                </h6>
+
                 <h3 class="text-success">
-                    @(((decimal)ViewBag.TotalAmount).ToString("N0")) VNĐ
+                    @totalAmount.ToString("N0") VNĐ
                 </h3>
             </div>
         </div>
 
         <div class="col-md-6 mb-3">
             <div class="card card-body shadow-sm">
-                <h6 class="text-muted">Số lượt quyên góp hợp lệ</h6>
+                <h6 class="text-muted">
+                    Số lượt quyên góp hợp lệ
+                </h6>
+
                 <h3>
-                    @ViewBag.TotalDonations lượt
+                    @totalDonations lượt
                 </h3>
             </div>
         </div>
 
     </div>
 
+    <!-- DANH SÁCH QUYÊN GÓP -->
     @if (Model != null && Model.Any())
     {
         <div class="table-responsive">
+
             <table class="table table-bordered table-hover align-middle">
 
                 <thead class="table-light">
@@ -48,13 +68,17 @@
                 </thead>
 
                 <tbody>
+
                     @{
-                        int stt = 1;
+                        // STT tiếp tục theo từng trang
+                        int stt = (Model.PageNumber - 1)
+                                  * Model.PageSize + 1;
                     }
 
                     @foreach (var item in Model)
                     {
                         <tr>
+
                             <td>@stt</td>
 
                             <td>
@@ -66,11 +90,20 @@
                             <td>
                                 @if (item.DonationType == "InKind")
                                 {
-                                    <span>📦 @(item.Quantity.HasValue ? item.Quantity.Value.ToString("0.##") : "") @item.Unit @item.ItemName</span>
+                                    <span>
+                                        📦
+                                        @(item.Quantity.HasValue
+                                            ? item.Quantity.Value.ToString("0.##")
+                                            : "")
+                                        @item.Unit
+                                        @item.ItemName
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span>@item.Amount.ToString("N0") VNĐ</span>
+                                    <span>
+                                        @item.Amount.ToString("N0") VNĐ
+                                    </span>
                                 }
                             </td>
 
@@ -80,35 +113,66 @@
                                     : "Chưa xác định")
                             </td>
 
-                            <td>@item.PaymentMethod</td>
+                            <td>
+                                @item.PaymentMethod
+                            </td>
 
-                            <td>@item.TransactionCode</td>
+                            <td>
+                                @item.TransactionCode
+                            </td>
 
                             <td>
                                 @if (item.Status == 1)
                                 {
-                                    <span class="badge bg-success">Hợp lệ</span>
+                                    <span class="badge bg-success">
+                                        Hợp lệ
+                                    </span>
                                 }
                                 else if (item.Status == 0)
                                 {
-                                    <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                    <span class="badge bg-warning text-dark">
+                                        Chờ xác nhận
+                                    </span>
                                 }
                                 else if (item.Status == 2)
                                 {
-                                    <span class="badge bg-danger">Từ chối</span>
+                                    <span class="badge bg-danger">
+                                        Từ chối
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Chưa xác định</span>
+                                    <span class="badge bg-secondary">
+                                        Chưa xác định
+                                    </span>
                                 }
                             </td>
+
                         </tr>
 
                         stt++;
                     }
+
                 </tbody>
 
             </table>
+
+        </div>
+
+        <!-- PHÂN TRANG -->
+        <div class="d-flex justify-content-center mt-4">
+
+            @Html.PagedListPager(
+                     Model,
+                     page => Url.Action("History", new { page }),
+                     PagedListRenderOptions.Classic
+                 )
+
+        </div>
+
+        <div class="text-center text-muted mt-2">
+            Trang @Model.PageNumber / @Model.PageCount
+            - Tổng cộng @Model.TotalItemCount khoản quyên góp
         </div>
     }
     else
@@ -118,9 +182,12 @@
         </div>
     }
 
+    <!-- NÚT QUAY LẠI -->
     <a href="@Url.Action("Index", "Campaign")"
        class="btn btn-outline-primary mt-3">
+
         Xem các chiến dịch
+
     </a>
 
 </div>

@@ -615,3 +615,31 @@
         font-size: 25px;
     }
 }
+
+/* =====================================
+   FIX: ẢNH VÀ CHỮ TRANG CHI TIẾT KHÔNG BỊ ĐÈ
+===================================== */
+.charity-detail-page .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.charity-detail-page .campaign-detail-image {
+    width: 100% !important;
+    height: 380px !important;
+    object-fit: cover;
+    border-radius: 15px;
+    display: block;
+}
+
+.charity-detail-page .campaign-detail-info {
+    padding: 0 10px;
+}
+
+@media (max-width: 767px) {
+    .charity-detail-page .campaign-detail-image {
+        height: 250px !important;
+        margin-bottom: 20px;
+    }
+}

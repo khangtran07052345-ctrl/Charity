@@ -1,0 +1,173 @@
+﻿
+@model Charity.Models.Donation
+
+@{
+    ViewBag.Title = "Chi tiết quyên góp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Chi tiết quyên góp</h2>
+            <p class="text-muted mb-0">
+                Thông tin chi tiết giao dịch quyên góp.
+            </p>
+        </div>
+
+        <a href="@Url.Action("Donations", "Admin")"
+           class="btn btn-outline-secondary">
+            Quay lại
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <h5 class="fw-bold mb-3">Thông tin giao dịch</h5>
+
+            <table class="table table-bordered align-middle">
+
+                <tr>
+                    <th style="width: 30%">Mã giao dịch</th>
+                    <td>@Model.TransactionCode</td>
+                </tr>
+
+                <tr>
+                    <th>Người quyên góp</th>
+                    <td>
+                        @if (Model.IsAnonymous == true)
+                        {
+                            <span>Người quyên góp ẩn danh</span>
+                        }
+                        else if (Model.User != null)
+                        {
+                            @Model.User.FullName
+                            <br />
+                            <small class="text-muted">
+                                @Model.User.Email
+                            </small>
+                        }
+                        else
+                        {
+                            <span>Không xác định</span>
+                        }
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Chiến dịch</th>
+                    <td>
+                        @(Model.Campaign != null
+                            ? Model.Campaign.Title
+                            : "Không xác định")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Loại quyên góp</th>
+                    <td>@Model.DonationType</td>
+                </tr>
+
+                @if (Model.DonationType == "InKind")
+                {
+                    <tr>
+                        <th>Tên hiện vật</th>
+                        <td>@Model.ItemName</td>
+                    </tr>
+
+                    <tr>
+                        <th>Số lượng</th>
+                        <td>@Model.Quantity @Model.Unit</td>
+                    </tr>
+
+                    <tr>
+                        <th>Giá trị ước tính</th>
+                        <td>
+                            @(Model.EstimatedValue.HasValue
+                                ? Model.EstimatedValue.Value.ToString("N0") + " đ"
+                                : "Chưa cập nhật")
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Phương thức giao</th>
+                        <td>@Model.DeliveryMethod</td>
+                    </tr>
+
+                    <tr>
+                        <th>Số điện thoại</th>
+                        <td>@Model.ContactPhone</td>
+                    </tr>
+
+                    <tr>
+                        <th>Địa chỉ nhận</th>
+                        <td>@Model.PickupAddress</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th>Số tiền</th>
+                        <td class="fw-bold text-success">
+                            @Model.Amount.ToString("N0") đ
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Phương thức thanh toán</th>
+                        <td>@Model.PaymentMethod</td>
+                    </tr>
+                }
+
+                <tr>
+                    <th>Thời gian</th>
+                    <td>
+                        @(Model.DonatedAt.HasValue
+                            ? Model.DonatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+                            : "Chưa xác định")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Nội dung</th>
+                    <td>@Model.Message</td>
+                </tr>
+
+                <tr>
+                    <th>Trạng thái</th>
+                    <td>
+                        @if (Model.Status == 1)
+                        {
+                            <span class="badge bg-success">Hợp lệ</span>
+                        }
+                        else if (Model.Status == 0)
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chưa xác nhận
+                            </span>
+                        }
+                        else if (Model.Status == 2)
+                        {
+                            <span class="badge bg-danger">Từ chối</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Không xác định
+                            </span>
+                        }
+                    </td>
+                </tr>
+
+            </table>
+
+            <a href="@Url.Action("Donations", "Admin")"
+               class="btn btn-secondary">
+                Quay lại danh sách
+            </a>
+
+        </div>
+    </div>
+</div>

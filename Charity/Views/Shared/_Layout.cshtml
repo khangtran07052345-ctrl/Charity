@@ -1,25 +1,23 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewBag.Title - CHARITY</title>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
     @RenderSection("styles", required: false)
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-
-    <!-- ================================
-         CHARITY HEADER
-    ================================= -->
-
+    <!-- HEADER -->
     <header class="charity-header">
 
-        <!-- Thanh thông tin phía trên -->
         <div class="charity-topbar">
             <div class="container charity-topbar-inner">
                 <div class="charity-topbar-left">
@@ -28,87 +26,71 @@
                 </div>
 
                 <div class="charity-topbar-right">
-                    <span>Trao yêu thương, nhận hạnh phúc</span>
+                    Trao yêu thương, nhận hạnh phúc
                 </div>
             </div>
         </div>
 
-        <!-- Thanh điều hướng chính -->
         <nav class="navbar navbar-expand-lg charity-navbar">
-
             <div class="container">
 
-                <!-- Logo -->
                 @Html.ActionLink(
-                                   "CHARITY",
-                                   "Index",
-                                   "Home",
-                                   new { area = "" },
-                                   new { @class = "navbar-brand charity-brand" }
-                               )
+                         "CHARITY",
+                         "Index",
+                         "Home",
+                         new { area = "" },
+                         new { @class = "navbar-brand charity-brand" }
+                     )
 
-                <!-- Nút menu mobile -->
                 <button class="navbar-toggler charity-toggler"
                         type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
+                        data-toggle="collapse"
+                        data-target="#mainNavbar"
                         aria-controls="mainNavbar"
                         aria-expanded="false"
-                        aria-label="Mở menu điều hướng">
+                        aria-label="Mở menu">
 
                     <span class="navbar-toggler-icon"></span>
-
                 </button>
 
-                <!-- Nội dung menu -->
                 <div class="collapse navbar-collapse" id="mainNavbar">
 
-                    <!-- Menu chính -->
                     <ul class="navbar-nav charity-nav mx-auto">
 
                         <li class="nav-item">
                             @Html.ActionLink(
-                                               "Trang chủ",
-                                               "Index",
-                                               "Home",
-                                               new { area = "" },
-                                               new { @class = "nav-link" }
-                                           )
+                                     "Trang chủ", "Index", "Home",
+                                     new { area = "" },
+                                     new { @class = "nav-link" }
+                                 )
                         </li>
 
                         <li class="nav-item">
                             @Html.ActionLink(
-                                               "Chiến dịch",
-                                               "Index",
-                                               "Campaign",
-                                               new { area = "" },
-                                               new { @class = "nav-link" }
-                                           )
+                                     "Chiến dịch", "Index", "Campaign",
+                                     new { area = "" },
+                                     new { @class = "nav-link" }
+                                 )
                         </li>
 
                         <li class="nav-item">
                             @Html.ActionLink(
-                                               "Giới thiệu",
-                                               "GioiThieu",
-                                               "Home",
-                                               new { area = "" },
-                                               new { @class = "nav-link" }
-                                           )
+                                     "Giới thiệu", "GioiThieu", "Home",
+                                     new { area = "" },
+                                     new { @class = "nav-link" }
+                                 )
                         </li>
 
                         <li class="nav-item">
                             @Html.ActionLink(
-                                               "Liên hệ",
-                                               "LienHe",
-                                               "Home",
-                                               new { area = "" },
-                                               new { @class = "nav-link" }
-                                           )
+                                     "Liên hệ", "LienHe", "Home",
+                                     new { area = "" },
+                                     new { @class = "nav-link" }
+                                 )
                         </li>
 
                     </ul>
 
-                    <!-- Khu vực tài khoản -->
                     <div class="charity-account">
 
                         @if (Session["UserId"] != null)
@@ -118,60 +100,49 @@
                             </span>
 
                             @Html.ActionLink(
-                                               "Đăng xuất",
-                                               "Logout",
-                                               "Account",
-                                               new { area = "" },
-                                               new { @class = "charity-login-link" }
-                                           )
+                                     "Đăng xuất",
+                                     "Logout",
+                                     "Account",
+                                     new { area = "" },
+                                     new { @class = "charity-login-link" }
+                                 )
                         }
                         else
                         {
                             @Html.ActionLink(
-                                               "Đăng nhập",
-                                               "Login",
-                                               "Account",
-                                               new { area = "" },
-                                               new { @class = "charity-login-link" }
-                                           )
+                                     "Đăng nhập",
+                                     "Login",
+                                     "Account",
+                                     new { area = "" },
+                                     new { @class = "charity-login-link" }
+                                 )
 
                             @Html.ActionLink(
-                                               "Tham gia ngay",
-                                               "Register",
-                                               "Account",
-                                               new { area = "" },
-                                               new { @class = "charity-register-btn" }
-                                           )
+                                     "Tham gia ngay",
+                                     "Register",
+                                     "Account",
+                                     new { area = "" },
+                                     new { @class = "charity-register-btn" }
+                                 )
                         }
 
                     </div>
-
                 </div>
-
             </div>
-
         </nav>
-
     </header>
 
-    <!-- END CHARITY HEADER -->
-    <!-- Nội dung từng trang -->
-    <div class="body-content flex-grow-1">
+    <!-- MAIN CONTENT -->
+    <main class="body-content flex-grow-1">
         @RenderBody()
-    </div>
+    </main>
 
-    <!-- Chân trang -->
-    <!-- ================================
-         CHARITY FOOTER
-    ================================= -->
-
+    <!-- FOOTER -->
     <footer class="charity-footer">
-
         <div class="container">
 
             <div class="row charity-footer-main">
 
-                <!-- Cột 1: Thương hiệu -->
                 <div class="col-lg-4 col-md-6 footer-column">
 
                     <a href="@Url.Action("Index", "Home")"
@@ -189,72 +160,32 @@
                     <div class="footer-slogan">
                         Chung tay hôm nay – Thay đổi ngày mai.
                     </div>
-
                 </div>
 
-                <!-- Cột 2: Liên kết -->
                 <div class="col-lg-2 col-md-6 footer-column">
 
                     <h5>Khám phá</h5>
 
                     <ul class="footer-links">
-
-                        <li>
-                            @Html.ActionLink(
-                                          "Trang chủ", "Index", "Home"
-                                      )
-                        </li>
-
-                        <li>
-                            @Html.ActionLink(
-                                          "Chiến dịch", "Index", "Campaign"
-                                      )
-                        </li>
-
-                        <li>
-                            @Html.ActionLink(
-                                          "Giới thiệu", "GioiThieu", "Home"
-                                      )
-                        </li>
-
-                        <li>
-                            @Html.ActionLink(
-                                          "Liên hệ", "LienHe", "Home"
-                                      )
-                        </li>
-
+                        <li>@Html.ActionLink("Trang chủ", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Chiến dịch", "Index", "Campaign")</li>
+                        <li>@Html.ActionLink("Giới thiệu", "GioiThieu", "Home")</li>
+                        <li>@Html.ActionLink("Liên hệ", "LienHe", "Home")</li>
                     </ul>
-
                 </div>
 
-                <!-- Cột 3: Hoạt động -->
                 <div class="col-lg-3 col-md-6 footer-column">
 
                     <h5>Hoạt động</h5>
 
                     <ul class="footer-links">
-
-                        <li>
-                            <span>Hỗ trợ cộng đồng</span>
-                        </li>
-
-                        <li>
-                            <span>Chương trình thiện nguyện</span>
-                        </li>
-
-                        <li>
-                            <span>Kết nối nhà hảo tâm</span>
-                        </li>
-
-                        <li>
-                            <span>Lan tỏa yêu thương</span>
-                        </li>
-
+                        <li>Hỗ trợ cộng đồng</li>
+                        <li>Chương trình thiện nguyện</li>
+                        <li>Kết nối nhà hảo tâm</li>
+                        <li>Lan tỏa yêu thương</li>
                     </ul>
-
                 </div>
 
-                <!-- Cột 4: Kết nối -->
                 <div class="col-lg-3 col-md-6 footer-column">
 
                     <h5>Kết nối với chúng tôi</h5>
@@ -265,42 +196,34 @@
                     </p>
 
                     @Html.ActionLink(
-                                  "Liên hệ với chúng tôi →",
-                                  "LienHe",
-                                  "Home",
-                                  new { area = "" },
-                                  new { @class = "footer-contact-link" }
-                              )
-
+                             "Liên hệ với chúng tôi →",
+                             "LienHe",
+                             "Home",
+                             new { area = "" },
+                             new { @class = "footer-contact-link" }
+                         )
                 </div>
 
             </div>
 
-            <!-- Dòng bản quyền -->
             <div class="charity-footer-bottom">
-
                 <p>
                     &copy; @DateTime.Now.Year CHARITY.
                     All Rights Reserved.
                 </p>
 
                 <p>
-                    Made with
-                    <span class="footer-heart">♥</span>
+                    Made with <span class="footer-heart">♥</span>
                     for the community.
                 </p>
-
             </div>
 
         </div>
-
     </footer>
-
-    <!-- END CHARITY FOOTER -->
-
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("scripts", required: false)
 
 </body>

@@ -50,6 +50,8 @@
           <Property Name="DeliveryMethod" Type="nvarchar" MaxLength="50" />
           <Property Name="ContactPhone" Type="varchar" MaxLength="20" />
           <Property Name="PickupAddress" Type="nvarchar" MaxLength="300" />
+          <Property Name="DeliverySubOption" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostalTrackingCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -171,6 +173,8 @@
           <Property Name="DeliveryMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContactPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="PickupAddress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="DeliverySubOption" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostalTrackingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -273,6 +277,8 @@
           <EntitySetMapping Name="Donations">
             <EntityTypeMapping TypeName="CharityDBModel.Donation">
               <MappingFragment StoreEntitySet="Donations">
+                <ScalarProperty Name="PostalTrackingCode" ColumnName="PostalTrackingCode" />
+                <ScalarProperty Name="DeliverySubOption" ColumnName="DeliverySubOption" />
                 <ScalarProperty Name="PickupAddress" ColumnName="PickupAddress" />
                 <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
                 <ScalarProperty Name="DeliveryMethod" ColumnName="DeliveryMethod" />

@@ -1,0 +1,99 @@
+﻿
+@model Charity.Models.User
+
+@{
+    ViewBag.Title = "Chi tiết người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Chi tiết người dùng</h2>
+        <p class="text-muted">
+            Thông tin tài khoản trong hệ thống CHARITY
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">
+                Thông tin tài khoản #@Model.Id
+            </h5>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Mã người dùng</div>
+                <div class="col-md-8 fw-semibold">@Model.Id</div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Họ và tên</div>
+                <div class="col-md-8 fw-semibold">@Model.FullName</div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Email</div>
+                <div class="col-md-8">@Model.Email</div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Số điện thoại</div>
+                <div class="col-md-8">
+                    @(string.IsNullOrWhiteSpace(Model.PhoneNumber)
+                        ? "Chưa cập nhật"
+                        : Model.PhoneNumber)
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Vai trò</div>
+                <div class="col-md-8">
+                    @if (Model.Role == "Admin")
+                    {
+                        <span class="badge bg-danger">Quản trị viên</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Người dùng</span>
+                    }
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Ngày tạo tài khoản</div>
+                <div class="col-md-8">
+                    @(Model.CreatedAt.HasValue
+                        ? Model.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+                        : "Không có dữ liệu")
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <a href="@Url.Action("EditUser", "Admin", new { id = Model.Id })"
+                   class="btn btn-warning">
+                    Chỉnh sửa
+                </a>
+
+                <a href="@Url.Action("Users", "Admin")"
+                   class="btn btn-outline-secondary">
+                    Quay lại danh sách
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>

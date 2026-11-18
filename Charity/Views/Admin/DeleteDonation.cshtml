@@ -1,0 +1,119 @@
+﻿
+@model Charity.Models.Donation
+
+@{
+    ViewBag.Title = "Xóa quyên góp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+
+    <div class="card border-0 shadow-sm mx-auto"
+         style="max-width: 650px">
+
+        <div class="card-body p-4">
+
+            <h3 class="fw-bold text-danger mb-3">
+                <i class="bi bi-trash"></i>
+                Xác nhận xóa quyên góp
+            </h3>
+
+            <div class="alert alert-warning">
+                Bạn có chắc chắn muốn xóa giao dịch này không?
+                Thao tác này không thể hoàn tác.
+            </div>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th style="width: 35%">Mã giao dịch</th>
+                    <td>@Model.TransactionCode</td>
+                </tr>
+
+                <tr>
+                    <th>Người quyên góp</th>
+                    <td>
+                        @(Model.IsAnonymous == true
+                            ? "Ẩn danh"
+                            : Model.User != null
+                                ? Model.User.FullName
+                                : "Không xác định")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Chiến dịch</th>
+                    <td>
+                        @(Model.Campaign != null
+                            ? Model.Campaign.Title
+                            : "Không xác định")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Loại quyên góp</th>
+                    <td>@Model.DonationType</td>
+                </tr>
+
+                <tr>
+                    <th>Trạng thái</th>
+                    <td>
+                        @if (Model.Status == 0)
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chưa xác nhận
+                            </span>
+                        }
+                        else if (Model.Status == 2)
+                        {
+                            <span class="badge bg-danger">
+                                Từ chối
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Không thể xóa
+                            </span>
+                        }
+                    </td>
+                </tr>
+
+            </table>
+
+            @if (Model.Status == 0 || Model.Status == 2)
+            {
+                using (Html.BeginForm(
+                    "DeleteDonation",
+                    "Admin",
+                    FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("id", Model.Id)
+
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                        Xác nhận xóa
+                    </button>
+
+                    <a href="@Url.Action("Donations", "Admin")"
+                       class="btn btn-outline-secondary ms-2">
+                        Hủy
+                    </a>
+                }
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    Giao dịch hợp lệ không được phép xóa.
+                </div>
+
+                <a href="@Url.Action("Donations", "Admin")"
+                   class="btn btn-secondary">
+                    Quay lại
+                </a>
+            }
+
+        </div>
+    </div>
+</div>

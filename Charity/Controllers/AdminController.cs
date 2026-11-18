@@ -2,6 +2,7 @@
 using Charity.Models;
 using Charity.Services;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace Charity.Controllers
     {
         private readonly CharityDBEntities database = new CharityDBEntities();
 
-        // Kiểm tra quyền Admin
+        // =========================
+        // KIỂM TRA QUYỀN ADMIN
+        // =========================
         private ActionResult RequireAdmin()
         {
             if (Session["UserId"] == null)
@@ -56,10 +59,54 @@ namespace Charity.Controllers
             ViewBag.TotalTarget =
                 campaigns.Select(c => (decimal?)c.TargetAmount).Sum() ?? 0m;
 
-            ViewBag.Campaigns = new CampaignService(database)
+            // Dữ liệu biểu đồ chiến dịch
+            var campaignServiceList = new CampaignService(database)
                 .Search()
                 .OrderByDescending(c => c.EndDate)
                 .ToList();
+
+            ViewBag.CampaignNames =
+                campaignServiceList.Select(c => c.Title).ToList();
+
+            ViewBag.CampaignAmounts =
+                campaignServiceList.Select(c => c.RaisedAmount).ToList();
+
+            // Dữ liệu thống kê hiện vật hợp lệ
+            var inKindList = validDonations
+                .Where(d => d.DonationType == "Hiện vật" || d.ItemName != null)
+                .ToList();
+
+            int quanAo = inKindList
+                .Where(d => d.ItemName != null &&
+                            d.ItemName.ToLower().Contains("quần áo"))
+                .Sum(d => (int?)d.Quantity) ?? 0;
+
+            int mi = inKindList
+                .Where(d => d.ItemName != null &&
+                            (d.ItemName.ToLower().Contains("mì") ||
+                             d.ItemName.ToLower().Contains("mỳ")))
+                .Sum(d => (int?)d.Quantity) ?? 0;
+
+            int gao = inKindList
+                .Where(d => d.ItemName != null &&
+                            d.ItemName.ToLower().Contains("gạo"))
+                .Sum(d => (int?)d.Quantity) ?? 0;
+
+            int aoAm = inKindList
+                .Where(d => d.ItemName != null &&
+                            d.ItemName.ToLower().Contains("áo ấm"))
+                .Sum(d => (int?)d.Quantity) ?? 0;
+
+            int sachVo = inKindList
+                .Where(d => d.ItemName != null &&
+                            (d.ItemName.ToLower().Contains("sách") ||
+                             d.ItemName.ToLower().Contains("vở")))
+                .Sum(d => (int?)d.Quantity) ?? 0;
+
+            ViewBag.InKindData =
+                new List<int> { quanAo, mi, gao, aoAm, sachVo };
+
+            ViewBag.Campaigns = campaignServiceList;
 
             return View();
         }
@@ -127,10 +174,8 @@ namespace Charity.Controllers
                 campaign.StartDate = input.StartDate;
                 campaign.EndDate = input.EndDate;
                 campaign.Status = input.Status;
-
                 campaign.CreatedAt = DateTime.Now;
 
-                // Lưu ảnh nếu Admin đã chọn file
                 if (campaignImage != null &&
                     campaignImage.ContentLength > 0)
                 {
@@ -187,17 +232,14 @@ namespace Charity.Controllers
             if (input == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            // Lấy chiến dịch hiện tại từ database
             var campaign = database.Campaigns.Find(input.Id);
 
             if (campaign == null)
                 return HttpNotFound();
 
-            // Kiểm tra dữ liệu
             ValidateCampaign(input);
             ValidateCampaignImage(campaignImage);
 
-            // Giữ ảnh hiện tại khi hiển thị lại form nếu có lỗi
             input.ImageUrl = campaign.ImageUrl;
 
             if (ModelState.IsValid)
@@ -210,14 +252,12 @@ namespace Charity.Controllers
                 campaign.EndDate = input.EndDate;
                 campaign.Status = input.Status;
 
-                // Chỉ thay ảnh nếu Admin chọn ảnh mới
                 if (campaignImage != null &&
                     campaignImage.ContentLength > 0)
                 {
                     campaign.ImageUrl = SaveCampaignImage(campaignImage);
                 }
 
-                // Không chọn ảnh mới thì giữ nguyên ImageUrl cũ
                 database.SaveChanges();
 
                 TempData["Success"] = "Đã cập nhật chiến dịch.";
@@ -267,7 +307,6 @@ namespace Charity.Controllers
             if (campaign == null)
                 return HttpNotFound();
 
-            // Không cho xóa chiến dịch đã có quyên góp
             if (database.Donations.Any(d => d.CampaignId == id))
             {
                 TempData["Error"] =
@@ -285,7 +324,7 @@ namespace Charity.Controllers
         }
 
         // =========================
-        // QUẢN LÝ QUYÊN GÓP
+        // DANH SÁCH QUYÊN GÓP
         // =========================
         public ActionResult Donations(string keyword, int? status, string type)
         {
@@ -299,6 +338,8 @@ namespace Charity.Controllers
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
+                keyword = keyword.Trim();
+
                 query = query.Where(d =>
                     d.TransactionCode.Contains(keyword) ||
                     d.User.FullName.Contains(keyword) ||
@@ -326,7 +367,32 @@ namespace Charity.Controllers
             );
         }
 
-        // Xác nhận đã nhận hiện vật
+        // =========================
+        // CHI TIẾT QUYÊN GÓP
+        // =========================
+        [HttpGet]
+        public ActionResult DetailsDonation(int? id)
+        {
+            var denied = RequireAdmin();
+            if (denied != null) return denied;
+
+            if (!id.HasValue)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var donation = database.Donations
+                .Include(d => d.User)
+                .Include(d => d.Campaign)
+                .FirstOrDefault(d => d.Id == id.Value);
+
+            if (donation == null)
+                return HttpNotFound();
+
+            return View(donation);
+        }
+
+        // =========================
+        // XÁC NHẬN QUYÊN GÓP HIỆN VẬT
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmDonation(int id)
@@ -334,20 +400,27 @@ namespace Charity.Controllers
             var denied = RequireAdmin();
             if (denied != null) return denied;
 
-            var d = database.Donations.Find(id);
-            if (d == null) return HttpNotFound();
+            var donation = database.Donations.Find(id);
 
-            if (d.Status == 0)
+            if (donation == null)
+                return HttpNotFound();
+
+            if (donation.Status == 0)
             {
-                d.Status = 1;
+                donation.Status = 1;
                 database.SaveChanges();
-                TempData["Success"] = "Đã xác nhận khoản quyên góp " + d.TransactionCode + ".";
+
+                TempData["Success"] =
+                    "Đã xác nhận khoản quyên góp " +
+                    donation.TransactionCode + ".";
             }
 
             return RedirectToAction("Donations");
         }
 
-        // Từ chối khoản quyên góp
+        // =========================
+        // TỪ CHỐI QUYÊN GÓP
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RejectDonation(int id)
@@ -355,15 +428,104 @@ namespace Charity.Controllers
             var denied = RequireAdmin();
             if (denied != null) return denied;
 
-            var d = database.Donations.Find(id);
-            if (d == null) return HttpNotFound();
+            var donation = database.Donations.Find(id);
 
-            if (d.Status == 0)
+            if (donation == null)
+                return HttpNotFound();
+
+            if (donation.Status == 0)
             {
-                d.Status = 2;
+                donation.Status = 2;
                 database.SaveChanges();
-                TempData["Success"] = "Đã từ chối khoản quyên góp " + d.TransactionCode + ".";
+
+                TempData["Success"] =
+                    "Đã từ chối khoản quyên góp " +
+                    donation.TransactionCode + ".";
             }
+
+            return RedirectToAction("Donations");
+        }
+
+        // =========================
+        // XÓA QUYÊN GÓP - GET
+        // =========================
+        [HttpGet]
+        public ActionResult DeleteDonation(int? id)
+        {
+            var denied = RequireAdmin();
+            if (denied != null) return denied;
+
+            if (!id.HasValue)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var donation = database.Donations
+                .Include(d => d.User)
+                .Include(d => d.Campaign)
+                .FirstOrDefault(d => d.Id == id.Value);
+
+            if (donation == null)
+                return HttpNotFound();
+
+            if (donation.Status == 1)
+            {
+                TempData["Error"] =
+                    "Không thể xóa giao dịch quyên góp đã hợp lệ.";
+
+                return RedirectToAction("Donations");
+            }
+
+            if (donation.Status != 0 && donation.Status != 2)
+            {
+                TempData["Error"] =
+                    "Trạng thái giao dịch không hợp lệ, không thể xóa.";
+
+                return RedirectToAction("Donations");
+            }
+
+            return View(donation);
+        }
+
+        // =========================
+        // XÓA QUYÊN GÓP - POST
+        // =========================
+        [HttpPost]
+        [ActionName("DeleteDonation")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteDonationConfirmed(int id)
+        {
+            var denied = RequireAdmin();
+            if (denied != null) return denied;
+
+            var donation = database.Donations.Find(id);
+
+            if (donation == null)
+                return HttpNotFound();
+
+            // Chặn xóa giao dịch hợp lệ
+            if (donation.Status == 1)
+            {
+                TempData["Error"] =
+                    "Không thể xóa giao dịch đã hợp lệ.";
+
+                return RedirectToAction("Donations");
+            }
+
+            // Chỉ cho xóa trạng thái 0 hoặc 2
+            if (donation.Status != 0 && donation.Status != 2)
+            {
+                TempData["Error"] =
+                    "Trạng thái giao dịch không hợp lệ, không thể xóa.";
+
+                return RedirectToAction("Donations");
+            }
+
+            string transactionCode = donation.TransactionCode;
+
+            database.Donations.Remove(donation);
+            database.SaveChanges();
+
+            TempData["Success"] =
+                "Đã xóa giao dịch " + transactionCode + ".";
 
             return RedirectToAction("Donations");
         }
@@ -466,7 +628,7 @@ namespace Charity.Controllers
         }
 
         // =========================
-        // LƯU FILE ẢNH VÀO SERVER
+        // LƯU FILE ẢNH
         // =========================
         private string SaveCampaignImage(HttpPostedFileBase image)
         {
@@ -489,6 +651,259 @@ namespace Charity.Controllers
 
             return "/Content/Images/Campaigns/" + fileName;
         }
+
+        // =============================================
+        // QUẢN LÝ NGƯỜI DÙNG
+        // =============================================
+
+        // GET: Admin/Users
+        public ActionResult Users(string keyword, string role)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var users = database.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+
+                users = users.Where(u =>
+                    u.FullName.Contains(keyword) ||
+                    u.Email.Contains(keyword));
+            }
+
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                users = users.Where(u => u.Role == role);
+            }
+
+            ViewBag.Keyword = keyword;
+            ViewBag.Role = role;
+
+            return View(users.OrderBy(u => u.Id).ToList());
+        }
+
+        // GET: Admin/DetailsUser/5
+        public ActionResult DetailsUser(int id)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = database.Users.Find(id);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(user);
+        }
+
+        // GET: Admin/CreateUser
+        public ActionResult CreateUser()
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        // POST: Admin/CreateUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateUser(
+            string FullName,
+            string Email,
+            string Password,
+            string PhoneNumber,
+            string Role)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (string.IsNullOrWhiteSpace(FullName) ||
+                string.IsNullOrWhiteSpace(Email) ||
+                string.IsNullOrWhiteSpace(Password))
+            {
+                ViewBag.Error = "Vui lòng nhập đầy đủ họ tên, email và mật khẩu.";
+                return View();
+            }
+
+            Email = Email.Trim();
+
+            if (database.Users.Any(u => u.Email == Email))
+            {
+                ViewBag.Error = "Email này đã tồn tại.";
+                return View();
+            }
+
+            if (Role != "User" && Role != "Admin")
+            {
+                ViewBag.Error = "Vai trò không hợp lệ.";
+                return View();
+            }
+
+            var user = new User
+            {
+                FullName = FullName.Trim(),
+                Email = Email,
+                PasswordHash = Password,
+                PhoneNumber = PhoneNumber,
+                Role = Role,
+                CreatedAt = DateTime.Now
+            };
+
+            database.Users.Add(user);
+            database.SaveChanges();
+
+            TempData["Success"] = "Thêm người dùng thành công.";
+            return RedirectToAction("Users");
+        }
+
+        // GET: Admin/EditUser/5
+        public ActionResult EditUser(int id)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = database.Users.Find(id);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(user);
+        }
+
+        // POST: Admin/EditUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditUser(
+            int Id,
+            string FullName,
+            string Email,
+            string PhoneNumber,
+            string Role,
+            string Password)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = database.Users.Find(Id);
+
+            if (user == null)
+                return HttpNotFound();
+
+            if (string.IsNullOrWhiteSpace(FullName) ||
+                string.IsNullOrWhiteSpace(Email))
+            {
+                ViewBag.Error = "Họ tên và email không được để trống.";
+                return View(user);
+            }
+
+            Email = Email.Trim();
+
+            if (database.Users.Any(u =>
+                u.Email == Email && u.Id != Id))
+            {
+                ViewBag.Error = "Email này đã được tài khoản khác sử dụng.";
+                return View(user);
+            }
+
+            if (Role != "User" && Role != "Admin")
+            {
+                ViewBag.Error = "Vai trò không hợp lệ.";
+                return View(user);
+            }
+
+            user.FullName = FullName.Trim();
+            user.Email = Email;
+            user.PhoneNumber = PhoneNumber;
+            user.Role = Role;
+
+            // Chỉ đổi mật khẩu khi Admin nhập mật khẩu mới.
+            if (!string.IsNullOrWhiteSpace(Password))
+            {
+                user.PasswordHash = Password;
+            }
+
+            database.SaveChanges();
+
+            TempData["Success"] = "Cập nhật người dùng thành công.";
+            return RedirectToAction("Users");
+        }
+
+        // GET: Admin/DeleteUser/5
+        public ActionResult DeleteUser(int id)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = database.Users.Find(id);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(user);
+        }
+
+        // POST: Admin/DeleteUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUserConfirmed(int id)
+        {
+            if (Session["UserId"] == null ||
+                (Session["Role"] as string) != "Admin")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            int currentUserId = Convert.ToInt32(Session["UserId"]);
+
+            if (id == currentUserId)
+            {
+                TempData["Error"] = "Bạn không thể xóa tài khoản đang đăng nhập.";
+                return RedirectToAction("Users");
+            }
+
+            var user = database.Users.Find(id);
+
+            if (user == null)
+                return HttpNotFound();
+
+            if (user.Donations != null && user.Donations.Any())
+            {
+                TempData["Error"] =
+                    "Không thể xóa tài khoản đã có lịch sử quyên góp.";
+                return RedirectToAction("Users");
+            }
+
+            database.Users.Remove(user);
+            database.SaveChanges();
+
+            TempData["Success"] = "Xóa người dùng thành công.";
+            return RedirectToAction("Users");
+        }
+
 
         // =========================
         // DISPOSE

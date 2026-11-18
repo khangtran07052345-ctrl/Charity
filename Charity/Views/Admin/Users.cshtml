@@ -1,0 +1,202 @@
+﻿
+@model IEnumerable<Charity.Models.User>
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var users = Model ?? Enumerable.Empty<Charity.Models.User>();
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Quản lý người dùng</h2>
+            <p class="text-muted mb-0">
+                Quản lý tài khoản và phân quyền người dùng
+            </p>
+        </div>
+
+        <a href="@Url.Action("CreateUser", "Admin")"
+           class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Thêm người dùng
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+
+            @using (Html.BeginForm("Users", "Admin", FormMethod.Get))
+            {
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tìm kiếm</label>
+                        <input type="text"
+                               name="keyword"
+                               value="@ViewBag.Keyword"
+                               class="form-control"
+                               placeholder="Nhập họ tên hoặc email..." />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Vai trò</label>
+                        <select name="role" class="form-select">
+                            <option value="">Tất cả vai trò</option>
+
+                            <option value="User"
+                                    @(ViewBag.Role == "User" ? "selected" : "")>
+                                Người dùng
+                            </option>
+
+                            <option value="Admin"
+                                    @(ViewBag.Role == "Admin" ? "selected" : "")>
+                                Quản trị viên
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Tìm kiếm
+                        </button>
+
+                        <a href="@Url.Action("Users", "Admin")"
+                           class="btn btn-outline-secondary">
+                            Làm mới
+                        </a>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">
+                Danh sách tài khoản
+                <span class="badge bg-primary">@users.Count()</span>
+            </h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!users.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">
+                                Không tìm thấy người dùng nào.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var user in users)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+
+                                <td class="fw-semibold">
+                                    @user.FullName
+                                </td>
+
+                                <td>@user.Email</td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(user.PhoneNumber)
+                                        ? "Chưa cập nhật"
+                                        : user.PhoneNumber)
+                                </td>
+
+                                <td>
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">
+                                            User
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @(user.CreatedAt.HasValue
+                                        ? user.CreatedAt.Value.ToString("dd/MM/yyyy")
+                                        : "—")
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-1">
+
+                                        <a href="@Url.Action("DetailsUser", "Admin", new { id = user.Id })"
+                                           class="btn btn-sm btn-info text-white"
+                                           title="Chi tiết">
+                                            Chi tiết
+                                        </a>
+
+                                        <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })"
+                                           class="btn btn-sm btn-warning"
+                                           title="Chỉnh sửa">
+                                            Sửa
+                                        </a>
+
+                                        <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })"
+                                           class="btn btn-sm btn-danger"
+                                           title="Xóa">
+                                            Xóa
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="@Url.Action("Index", "Admin")"
+           class="btn btn-outline-secondary">
+            Quay lại Dashboard
+        </a>
+    </div>
+
+</div>

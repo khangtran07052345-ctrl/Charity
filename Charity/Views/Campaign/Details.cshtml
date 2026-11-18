@@ -1,19 +1,42 @@
-﻿@model Charity.Models.CampaignViewModel
+﻿
+@model Charity.Models.CampaignViewModel
 @using System.Globalization
 
 @{
-    @section styles {
-        <link href="@Url.Content("~/Content/charity-system.css")"
-              rel="stylesheet" />
-    }
     ViewBag.Title = Model.Title;
     var vi = new CultureInfo("vi-VN");
 }
+
+@section styles {
+    <link href="@Url.Content("~/Content/charity-system.css")"
+          rel="stylesheet" />
+}
+
 <div class="container mt-3">
+
     @if (TempData["Success"] != null)
-    {<div class="alert alert-success">@TempData["Success"]</div>}
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
     @if (TempData["Error"] != null)
-    {<div class="alert alert-warning">@TempData["Error"]</div>}
+    {
+        <div class="alert alert-warning">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["EmailError"] != null)
+    {
+        <div class="alert alert-warning mt-2">
+            <strong>Chi tiết lỗi gửi email:</strong>
+            <br />
+            @TempData["EmailError"]
+        </div>
+    }
+
 </div>
 
 <div class="campaign-detail charity-detail-page">
@@ -22,22 +45,25 @@
 
         <!-- Cột ảnh -->
         <div class="col-md-6">
+
             @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
             {
                 <img src="@Url.Content(Model.ImageUrl)"
                      alt="@Model.Title"
-                     class="campaign-detail-image" />
+                     class="campaign-detail-image w-100 img-fluid" />
             }
             else
             {
                 <img src="@Url.Content("~/Content/Image/images (4).jpg")"
                      alt="@Model.Title"
-                     class="campaign-detail-image" />
+                     class="campaign-detail-image w-100 img-fluid" />
             }
+
         </div>
 
         <!-- Cột thông tin -->
         <div class="col-md-6">
+
             <div class="campaign-detail-info">
 
                 <span class="badge @Model.StatusBadgeClass mb-2">
@@ -54,22 +80,32 @@
                 </p>
 
                 <div class="progress mb-3" style="height: 16px;">
+
                     <div class="progress-bar bg-success"
                          role="progressbar"
                          style="width: @(Model.ProgressPercent)%"
                          aria-valuenow="@Model.ProgressPercent"
                          aria-valuemin="0"
                          aria-valuemax="100">
+
                         @Model.ProgressPercent%
+
                     </div>
+
                 </div>
 
                 <p>
                     Đã quyên góp
-                    <strong>@Model.RaisedAmount.ToString("N0", vi)đ</strong>
+                    <strong>
+                        @Model.RaisedAmount.ToString("N0", vi)đ
+                    </strong>
+
                     <br />
+
                     Mục tiêu
-                    <strong>@Model.TargetAmount.ToString("N0", vi)đ</strong>
+                    <strong>
+                        @Model.TargetAmount.ToString("N0", vi)đ
+                    </strong>
                 </p>
 
                 @if (Model.StatusKey == "ongoing")
@@ -87,18 +123,23 @@
                 }
 
             </div>
+
         </div>
 
     </div>
 
-    <!-- Phần giới thiệu căn thẳng hàng với nội dung bên trên -->
+    <!-- Phần giới thiệu -->
     <div class="campaign-detail-description">
+
         <h4>Giới thiệu chiến dịch</h4>
+
         <p>@Model.Description</p>
+
     </div>
 
     <a href="@Url.Action("Index", "Campaign")"
        class="campaign-detail-back">
         ← Quay lại danh sách
     </a>
+
 </div>

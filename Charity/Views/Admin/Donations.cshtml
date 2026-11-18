@@ -1,4 +1,5 @@
-﻿@using System.Linq
+﻿
+@using System.Linq
 @model IEnumerable<Charity.Models.Donation>
 
 @{
@@ -6,30 +7,47 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var donations = Model ?? Enumerable.Empty<Charity.Models.Donation>();
+
     decimal validTotal = ViewBag.ValidTotal == null
         ? 0m
-        : (decimal)ViewBag.ValidTotal;
+        : Convert.ToDecimal(ViewBag.ValidTotal);
 
     int totalTransactions = donations.Count();
     int validCount = donations.Count(d => d.Status == 1);
 }
+
 @section styles {
     <link href="@Url.Content("~/Content/charity-system.css")"
           rel="stylesheet" />
 }
+
 <div class="container charity-admin-page mt-4 mb-5">
 
+    <!-- THÔNG BÁO -->
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success">@TempData["Success"]</div>
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
     }
 
-    <!-- Tiêu đề -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["Error"]
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- TIÊU ĐỀ -->
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
         <div>
             <h2 class="fw-bold mb-1">Quản lý quyên góp</h2>
             <p class="text-muted mb-0">
-                Theo dõi và tra cứu tất cả giao dịch quyên góp trên hệ thống.
+                Theo dõi, tra cứu và quản lý tất cả giao dịch quyên góp.
             </p>
         </div>
 
@@ -39,7 +57,7 @@
         </a>
     </div>
 
-    <!-- Thống kê -->
+    <!-- THỐNG KÊ -->
     <div class="row g-3 mb-4">
 
         <div class="col-md-4">
@@ -48,9 +66,7 @@
                     <div class="text-muted small mb-2">
                         Tổng giao dịch trong kết quả lọc
                     </div>
-                    <h3 class="fw-bold mb-0">
-                        @totalTransactions
-                    </h3>
+                    <h3 class="fw-bold mb-0">@totalTransactions</h3>
                     <small class="text-muted">Giao dịch</small>
                 </div>
             </div>
@@ -62,9 +78,7 @@
                     <div class="text-muted small mb-2">
                         Giao dịch hợp lệ
                     </div>
-                    <h3 class="fw-bold text-success mb-0">
-                        @validCount
-                    </h3>
+                    <h3 class="fw-bold text-success mb-0">@validCount</h3>
                     <small class="text-muted">Giao dịch</small>
                 </div>
             </div>
@@ -86,7 +100,7 @@
 
     </div>
 
-    <!-- Tìm kiếm và lọc -->
+    <!-- TÌM KIẾM VÀ LỌC -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
 
@@ -109,8 +123,14 @@
                         <label class="form-label">Loại</label>
                         <select name="type" class="form-select">
                             <option value="">Tất cả</option>
-                            <option value="Money" @((string)ViewBag.Type == "Money" ? "selected" : "")>Tiền</option>
-                            <option value="InKind" @((string)ViewBag.Type == "InKind" ? "selected" : "")>Hiện vật</option>
+                            <option value="Money"
+                                    @((string)ViewBag.Type == "Money" ? "selected" : "")>
+                                Tiền
+                            </option>
+                            <option value="InKind"
+                                    @((string)ViewBag.Type == "InKind" ? "selected" : "")>
+                                Hiện vật
+                            </option>
                         </select>
                     </div>
 
@@ -137,8 +157,9 @@
                     </div>
 
                     <div class="col-md-3 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn btn-primary flex-grow-1">
-                            Tìm kiếm
+                        <button type="submit"
+                                class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-search"></i> Tìm kiếm
                         </button>
 
                         <a href="@Url.Action("Donations", "Admin")"
@@ -153,7 +174,7 @@
         </div>
     </div>
 
-    <!-- Danh sách giao dịch -->
+    <!-- DANH SÁCH GIAO DỊCH -->
     <div class="card border-0 shadow-sm">
 
         <div class="card-header bg-white py-3">
@@ -188,8 +209,11 @@
                             foreach (var d in donations)
                             {
                                 <tr>
+
+                                    <!-- STT -->
                                     <td class="ps-3">@stt</td>
 
+                                    <!-- MÃ GIAO DỊCH -->
                                     <td>
                                         <span class="fw-semibold">
                                             @(string.IsNullOrWhiteSpace(d.TransactionCode)
@@ -198,6 +222,7 @@
                                         </span>
                                     </td>
 
+                                    <!-- NGƯỜI QUYÊN GÓP -->
                                     <td>
                                         @if (d.IsAnonymous == true)
                                         {
@@ -216,91 +241,178 @@
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Không xác định</span>
+                                            <span class="text-muted">
+                                                Không xác định
+                                            </span>
                                         }
                                     </td>
 
+                                    <!-- CHIẾN DỊCH -->
                                     <td>
                                         @(d.Campaign != null
                                             ? d.Campaign.Title
                                             : "Không xác định")
                                     </td>
 
+                                    <!-- SỐ TIỀN / HIỆN VẬT -->
                                     <td>
                                         @if (d.DonationType == "InKind")
                                         {
                                             <div class="fw-bold text-info">
-                                                📦 @(d.Quantity.HasValue ? d.Quantity.Value.ToString("0.##") : "") @d.Unit @d.ItemName
+                                                📦
+                                                @(d.Quantity.HasValue
+                                                    ? d.Quantity.Value.ToString("0.##")
+                                                    : "")
+                                                @d.Unit @d.ItemName
                                             </div>
-                                            <small class="text-muted d-block">Giao: @d.DeliveryMethod</small>
-                                            <small class="text-muted d-block">SĐT: @d.ContactPhone</small>
+
+                                            <small class="text-muted d-block">
+                                                Giao: @d.DeliveryMethod
+                                            </small>
+
+                                            <small class="text-muted d-block">
+                                                SĐT: @d.ContactPhone
+                                            </small>
+
                                             if (!string.IsNullOrWhiteSpace(d.PickupAddress))
                                             {
-                                                <small class="text-muted d-block">ĐC: @d.PickupAddress</small>
+                                                <small class="text-muted d-block">
+                                                    ĐC: @d.PickupAddress
+                                                </small>
                                             }
+
                                             if (d.EstimatedValue.HasValue)
                                             {
-                                                <small class="text-muted d-block">Ước tính: @d.EstimatedValue.Value.ToString("N0") đ</small>
+                                                <small class="text-muted d-block">
+                                                    Ước tính:
+                                                    @d.EstimatedValue.Value.ToString("N0") đ
+                                                </small>
                                             }
                                         }
                                         else
                                         {
-                                            <span class="text-nowrap fw-bold text-success">@d.Amount.ToString("N0") đ</span>
+                                            <span class="text-nowrap fw-bold text-success">
+                                                @d.Amount.ToString("N0") đ
+                                            </span>
                                         }
                                     </td>
 
+                                    <!-- THỜI GIAN -->
                                     <td class="text-nowrap">
                                         @(d.DonatedAt.HasValue
                                             ? d.DonatedAt.Value.ToString("dd/MM/yyyy HH:mm")
                                             : "—")
                                     </td>
 
+                                    <!-- PHƯƠNG THỨC -->
                                     <td>
                                         @(string.IsNullOrWhiteSpace(d.PaymentMethod)
                                             ? "—"
                                             : d.PaymentMethod)
                                     </td>
 
+                                    <!-- TRẠNG THÁI -->
                                     <td>
                                         @if (d.Status == 1)
                                         {
-                                            <span class="badge rounded-pill bg-success">Hợp lệ</span>
+                                            <span class="badge rounded-pill bg-success">
+                                                Hợp lệ
+                                            </span>
                                         }
                                         else if (d.Status == 0)
                                         {
-                                            <span class="badge rounded-pill bg-warning text-dark">Chưa xác nhận</span>
+                                            <span class="badge rounded-pill bg-warning text-dark">
+                                                Chưa xác nhận
+                                            </span>
                                         }
                                         else if (d.Status == 2)
                                         {
-                                            <span class="badge rounded-pill bg-danger">Từ chối</span>
+                                            <span class="badge rounded-pill bg-danger">
+                                                Từ chối
+                                            </span>
                                         }
                                         else
                                         {
-                                            <span class="badge rounded-pill bg-secondary">Không xác định</span>
+                                            <span class="badge rounded-pill bg-secondary">
+                                                Không xác định
+                                            </span>
                                         }
                                     </td>
 
+                                    <!-- THAO TÁC -->
                                     <td class="text-nowrap">
+
+                                        <!-- CHI TIẾT: TẤT CẢ GIAO DỊCH -->
+                                        <a href="@Url.Action("DetailsDonation", "Admin", new { id = d.Id })"
+                                           class="btn btn-sm btn-outline-primary mb-1">
+                                            <i class="bi bi-eye"></i>
+                                            Chi tiết
+                                        </a>
+
                                         @if (d.Status == 0)
                                         {
-                                            using (Html.BeginForm("ConfirmDonation", "Admin", FormMethod.Post, new { @class = "d-inline" }))
+                                            <!-- XÁC NHẬN -->
+                                            using (Html.BeginForm(
+                                                "ConfirmDonation",
+                                                "Admin",
+                                                FormMethod.Post,
+                                                new { @class = "d-inline" }))
                                             {
                                                 @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@d.Id" />
-                                                <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@d.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-success mb-1">
+                                                    Xác nhận
+                                                </button>
                                             }
-                                            using (Html.BeginForm("RejectDonation", "Admin", FormMethod.Post, new { @class = "d-inline" }))
+
+                                            <!-- TỪ CHỐI -->
+                                            using (Html.BeginForm(
+                                                "RejectDonation",
+                                                "Admin",
+                                                FormMethod.Post,
+                                                new { @class = "d-inline" }))
                                             {
                                                 @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@d.Id" />
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">Từ chối</button>
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@d.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger mb-1">
+                                                    Từ chối
+                                                </button>
                                             }
+
+                                            <!-- XÓA -->
+                                            <a href="@Url.Action("DeleteDonation", "Admin", new { id = d.Id })"
+                                               class="btn btn-sm btn-danger mb-1">
+                                                <i class="bi bi-trash"></i>
+                                                Xóa
+                                            </a>
                                         }
-                                        else
+                                        else if (d.Status == 2)
                                         {
-                                            <span class="text-muted">—</span>
+                                            <!-- XÓA GIAO DỊCH BỊ TỪ CHỐI -->
+                                            <a href="@Url.Action("DeleteDonation", "Admin", new { id = d.Id })"
+                                               class="btn btn-sm btn-danger mb-1">
+                                                <i class="bi bi-trash"></i>
+                                                Xóa
+                                            </a>
                                         }
+                                        else if (d.Status == 1)
+                                        {
+                                            <span class="badge bg-light text-success border">
+                                                <i class="bi bi-lock"></i>
+                                                Đã khóa xóa
+                                            </span>
+                                        }
+
                                     </td>
+
                                 </tr>
 
                                 stt++;
@@ -310,18 +422,22 @@
                         {
                             <tr>
                                 <td colspan="9" class="text-center py-5">
+
                                     <div class="text-muted mb-2">
                                         Không tìm thấy giao dịch nào.
                                     </div>
+
                                     <a href="@Url.Action("Donations", "Admin")"
                                        class="btn btn-sm btn-outline-primary">
                                         Xem tất cả giao dịch
                                     </a>
+
                                 </td>
                             </tr>
                         }
 
                     </tbody>
+
                 </table>
             </div>
 
@@ -329,6 +445,7 @@
 
         <div class="card-footer bg-white">
             <small class="text-muted">
+                Tổng số giao dịch hiển thị: @totalTransactions
             </small>
         </div>
 

@@ -32,6 +32,8 @@ namespace Charity.Models
         public string DeliveryMethod { get; set; }
         public string ContactPhone { get; set; }
         public string PickupAddress { get; set; }
+        public string DeliverySubOption { get; set; }
+        public string PostalTrackingCode { get; set; }
     
         public virtual Campaign Campaign { get; set; }
         public virtual User User { get; set; }
