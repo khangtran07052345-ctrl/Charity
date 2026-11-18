@@ -1,8 +1,77 @@
 ﻿
+@model Charity.Models.User
+
 @{
-    ViewBag.Title = "DeleteUser";
+    ViewBag.Title = "Xóa người dùng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>DeleteUser</h2>
+<div class="container mt-5 mb-5">
+    <div class="card shadow-sm border-danger mx-auto" style="max-width: 650px;">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Xác nhận xóa người dùng</h4>
+        </div>
 
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <strong>Cảnh báo!</strong>
+                Bạn có chắc chắn muốn xóa tài khoản này không?
+                Thao tác này không thể hoàn tác.
+            </div>
+
+            <dl class="row">
+                <dt class="col-sm-4">Mã người dùng</dt>
+                <dd class="col-sm-8">@Model.Id</dd>
+
+                <dt class="col-sm-4">Họ và tên</dt>
+                <dd class="col-sm-8">@Model.FullName</dd>
+
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8">@Model.Email</dd>
+
+                <dt class="col-sm-4">Số điện thoại</dt>
+                <dd class="col-sm-8">
+                    @(string.IsNullOrWhiteSpace(Model.PhoneNumber)
+                        ? "Chưa cập nhật"
+                        : Model.PhoneNumber)
+                </dd>
+
+                <dt class="col-sm-4">Vai trò</dt>
+                <dd class="col-sm-8">
+                    @Model.Role
+                </dd>
+
+                <dt class="col-sm-4">Ngày tạo</dt>
+                <dd class="col-sm-8">
+                    @(Model.CreatedAt.HasValue
+                        ? Model.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+                        : "Không có dữ liệu")
+                </dd>
+            </dl>
+
+            <hr />
+
+            @using (Html.BeginForm("DeleteUserConfirmed", "Admin",
+                new { id = Model.Id }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Bạn chắc chắn muốn xóa tài khoản này?');">
+                        Xác nhận xóa
+                    </button>
+
+                    @Html.ActionLink(
+                             "Quay lại danh sách",
+                             "Users",
+                             "Admin",
+                             null,
+                             new { @class = "btn btn-secondary" }
+                         )
+                </div>
+            }
+        </div>
+    </div>
+</div>
